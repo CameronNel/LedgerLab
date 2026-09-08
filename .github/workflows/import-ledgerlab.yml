@@ -1,0 +1,36 @@
+name: Import LedgerLab v3 source
+
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/import-ledgerlab.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Inspect authorized temporary source transfer
+        shell: python
+        run: |
+          import urllib.request
+          from html.parser import HTMLParser
+          url = 'https://firestorage.ai/ja/f/zMDDK_JXpngg'
+          request = urllib.request.Request(url, headers={'User-Agent': 'LedgerLab repository import'})
+          with urllib.request.urlopen(request, timeout=30) as response:
+              text = response.read(200000).decode('utf-8', 'replace')
+              print('HTTP', response.status, 'TYPE', response.headers.get('Content-Type'))
+          class Links(HTMLParser):
+              def handle_starttag(self, tag, attrs):
+                  attrs = dict(attrs)
+                  if tag == 'script' and attrs.get('src'):
+                      print('SCRIPT', attrs['src'])
+                  if tag == 'a' and attrs.get('href'):
+                      print('LINK', attrs['href'])
+          Links().feed(text)
+          print('PAGE_START')
+          print(text[:24000])
+          print('PAGE_END')
