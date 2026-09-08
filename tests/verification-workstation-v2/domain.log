@@ -1,0 +1,16 @@
+Portable verification: Version 5.8.3; Node v22.16.0.
+Checks domain logic and the production request/session logic; not the React UI or deployment build.
+PASS: 7,938 accounting checks across five independently generated cases.
+PASS: 352 workflow, import, state, reference, schedule and close-control checks.
+(node:4439) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS: 269 persistence, notebook, request-validation and SQLite concurrency checks.
+Uses the production handlers/session logic with a real in-memory SQLite adapter. This is not a browser, D1-hosting or identity-provider end-to-end test.
+Full-year seed 42: 774 learner journals; 147 deliverables; 439404 serialized characters.
+Full-year seed 271828: 776 learner journals; 147 deliverables; 440181 serialized characters.
+PASS: 30,184 takeover, source-boundary, full-year progression, forecast, capture, backup and close-control assertions.
+Qualitative management judgement is not scored. These are domain tests, not React/browser or hosted deployment verification.
+(node:4494) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS: 32935 desktop catalogue, monthly gating, worksheet, file validation and production SQLite/API checks.
+PASS: 233 workbook calculation, reference-editing, template, XLSX export and state-regression assertions; 50 supported function names.

@@ -1,0 +1,6 @@
+{
+  "typescript": "5.8.3",
+  "kind": "Syntax/transpilation only. This is not a full application semantic typecheck or build.",
+  "files": 143,
+  "errors": []
+}

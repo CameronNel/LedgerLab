@@ -1,0 +1,20 @@
+{
+  "passed": 14,
+  "checks": [
+    "Cut removes the source only after paste",
+    "Cut preserves unmoved formula references",
+    "Dependent formula follows a same-sheet move",
+    "Cross-sheet cut retains the original precedent",
+    "Cross-sheet move qualifies source-sheet references",
+    "Dependants continue calculating after a cross-sheet move",
+    "Cross-sheet move clears the original cell",
+    "Undo restores both sheets and dependent references",
+    "Duplicate worksheet preserves its cells",
+    "Italic, underline and alignment controls apply",
+    "Wrap control applies",
+    "Increase decimals applies",
+    "Decrease decimals applies",
+    "No uncaught browser errors in cut and format checks"
+  ],
+  "errors": []
+}

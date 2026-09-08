@@ -1,0 +1,118 @@
+{
+  "engine": "artifact_tool",
+  "browser_export_recalculation": {
+    "B6": 500,
+    "C6": 524.75,
+    "F6": 300
+  },
+  "template_imports": [
+    {
+      "file": "v2-bank.xlsx",
+      "sheets": "{\"kind\":\"sheet\",\"id\":\"ws/urzl4n\",\"name\":\"Bank reconciliation\",\"index\":0,\"range\":\"A1:C22\",\"address\":\"A1:C22\"}\n{\"kind\":\"sheet\",\"id\":\"ws/recju8\",\"name\":\"Statement\",\"index\":1,\"range\":\"A1:F42\",\"address\":\"A1:F42\"}\n{\"kind\":\"sheet\",\"id\":\"ws/df5mos\",\"name\":\"Cashbook\",\"index\":2,\"range\":\"A1:F4\",\"address\":\"A1:F4\"}\n{\"kind\":\"sheet\",\"id\":\"ws/nvhcq6\",\"name\":\"Learner TB\",\"index\":3,\"range\":\"A1:E40\",\"address\":\"A1:E40\"}\n{\"kind\":\"sheet\",\"id\":\"ws/nxmy2f\",\"name\":\"Read me\",\"index\":4,\"range\":\"A1:B13\",\"address\":\"A1:B13\"}",
+      "first_sheet_cells": [
+        [
+          "Cash-book balance",
+          180677.5,
+          "Learner ledger at creation",
+          null
+        ],
+        [
+          "Unrecorded receipts (+)",
+          0,
+          null,
+          null
+        ],
+        [
+          "Unrecorded payments (-)",
+          0,
+          null,
+          null
+        ],
+        [
+          "Other ledger corrections (+/-)",
+          0,
+          null,
+          null
+        ],
+        [
+          "Adjusted cash book",
+          180677.5,
+          null,
+          null
+        ]
+      ]
+    },
+    {
+      "file": "v2-payroll.xlsx",
+      "sheets": "{\"kind\":\"sheet\",\"id\":\"ws/w4tgji\",\"name\":\"Payroll control\",\"index\":0,\"range\":\"A1:H17\",\"address\":\"A1:H17\"}\n{\"kind\":\"sheet\",\"id\":\"ws/j4cfk6\",\"name\":\"GL controls\",\"index\":1,\"range\":\"A1:F8\",\"address\":\"A1:F8\"}\n{\"kind\":\"sheet\",\"id\":\"ws/gcpdm0\",\"name\":\"Learner TB\",\"index\":2,\"range\":\"A1:E40\",\"address\":\"A1:E40\"}\n{\"kind\":\"sheet\",\"id\":\"ws/9ejm9n\",\"name\":\"Read me\",\"index\":3,\"range\":\"A1:B13\",\"address\":\"A1:B13\"}",
+      "first_sheet_cells": [
+        [
+          "Morgan Lee",
+          7050,
+          1692,
+          0
+        ],
+        [
+          "Alex Taylor",
+          6020,
+          1324.4,
+          50
+        ],
+        [
+          "Sam Patel",
+          5460,
+          1146.6,
+          0
+        ],
+        [
+          "Jamie Brooks",
+          4680,
+          889.2,
+          0
+        ],
+        [
+          "Riley Chen",
+          4240,
+          720.8,
+          25
+        ]
+      ]
+    },
+    {
+      "file": "v2-afs.xlsx",
+      "sheets": "{\"kind\":\"sheet\",\"id\":\"ws/uv6829\",\"name\":\"AFS mapping\",\"index\":0,\"range\":\"A1:H40\",\"address\":\"A1:H40\"}\n{\"kind\":\"sheet\",\"id\":\"ws/gak7ds\",\"name\":\"Disclosure checklist\",\"index\":1,\"range\":\"A1:F19\",\"address\":\"A1:F19\"}\n{\"kind\":\"sheet\",\"id\":\"ws/9yf8eq\",\"name\":\"Learner TB\",\"index\":2,\"range\":\"A1:E40\",\"address\":\"A1:E40\"}\n{\"kind\":\"sheet\",\"id\":\"ws/d26umf\",\"name\":\"Read me\",\"index\":3,\"range\":\"A1:B13\",\"address\":\"A1:B13\"}",
+      "first_sheet_cells": [
+        [
+          1000,
+          "Operating bank",
+          180677.5,
+          null
+        ],
+        [
+          1010,
+          "Petty cash",
+          500,
+          null
+        ],
+        [
+          1100,
+          "Trade receivables",
+          150102.2,
+          null
+        ],
+        [
+          1110,
+          "Expected credit loss allowance",
+          -3000,
+          null
+        ],
+        [
+          1200,
+          "Inventory",
+          118146,
+          null
+        ]
+      ]
+    }
+  ]
+}

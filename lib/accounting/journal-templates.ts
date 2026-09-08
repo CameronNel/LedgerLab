@@ -1,0 +1,11 @@
+import type {JournalTemplate,PracticeState} from './types';
+import {dr,cr} from './accounts';
+export function defaultJournalTemplates():JournalTemplate[]{return [
+ {id:'T-ACCRUAL',name:'Accrue services received',description:'Accrue services consumed before the supplier invoice arrives',lines:[dr('6110',150000),cr('2100',150000)],notes:'Illustrative $1,500. Replace with the supported service-period amount. Do not claim GST before the case attribution requirements are met. Consider a next-period reversal.',updatedAt:''},
+ {id:'T-PREPAYMENT',name:'Release an insurance prepayment',description:'Recognise insurance cover consumed in the month',lines:[dr('6200',100000),cr('1300',100000)],notes:'Illustrative $1,000. Recalculate using the policy coverage dates. This is consumption of an existing asset, not a new cash payment.',updatedAt:''},
+ {id:'T-SUBSCRIPTION',name:'Amortise a software prepayment',description:'Recognise software service coverage consumed in the month',lines:[dr('6210',50000),cr('1310',50000)],notes:'Illustrative $500. Confirm the contract term and the remaining prepaid balance.',updatedAt:''},
+ {id:'T-DEPRECIATION',name:'Record equipment depreciation',description:'Recognise the month’s equipment depreciation',lines:[dr('6500',150000),cr('1510',150000)],notes:'Illustrative $1,500. Replace with the asset-register calculation after checking additions, disposals, useful lives and residuals.',updatedAt:''},
+ {id:'T-DEFERRED-REVENUE',name:'Release an earned customer advance',description:'Recognise revenue as the related performance obligation is satisfied',lines:[dr('2300',250000),cr('4010',250000)],notes:'Illustrative $2,500. Confirm performance and avoid posting GST a second time where it was already recorded on the advance.',updatedAt:''},
+ {id:'T-PROVISION',name:'Increase a warranty provision',description:'Remeasure the warranty obligation at reporting date',lines:[dr('6700',100000),cr('2400',100000)],notes:'Illustrative $1,000 adjustment. Record required closing provision less the existing balance, not the whole closing estimate.',updatedAt:''}
+ ];}
+export function journalTemplates(state:PracticeState){return state.journalTemplates??defaultJournalTemplates();}

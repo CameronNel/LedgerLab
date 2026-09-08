@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "checks": [
+    "Unique source ZIP entries match explicit manifest inventory",
+    "Every included source byte count and SHA-256 matches the manifest",
+    "New module, test and guide paths are included",
+    "No generated solved fixture or learner test backup is included",
+    "Repackaging an extracted archive produces byte-identical ZIP output",
+    "Rebuilding the local HTML from extracted source produces byte-identical delivered HTML"
+  ],
+  "full_react_build_verified": false
+}

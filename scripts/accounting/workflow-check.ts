@@ -1,0 +1,142 @@
+import assert from 'node:assert/strict';
+import {generateCompany} from '../../lib/accounting/generator';
+import {initialState,applyCommand,gradeExercise,bankReconciliation,suggestedBankMatches,validateBackup,invoiceJournalLines,financialPosition,subledger,integrityChecks,accountBalances,cashFlow,journalsFor,reconciliationResult} from '../../lib/accounting/engine';
+import {importJournalCSV,parseCSV} from '../../lib/accounting/imports';
+import {journalCSV,sourcePack,zipFiles} from '../../lib/accounting/exports';
+import {assetSchedule,leaseSchedule,inventorySchedule,WORKPAPERS,taxBridge} from '../../lib/accounting/schedules';
+import {LESSONS} from '../../lib/accounting/lessons';
+import {dr,cr} from '../../lib/accounting/accounts';
+import {sum} from '../../lib/accounting/money';
+import {statementReconciliations} from '../../lib/accounting/reconciliations';
+import {financialNotes,equityMovement} from '../../lib/accounting/financial-notes';
+import {financialStatementsHTML} from '../../lib/accounting/exports';
+import {journalTemplates} from '../../lib/accounting/journal-templates';
+import {evidenceRequests,defaultEvidenceRequests} from '../../lib/accounting/evidence-requests';
+import {writeFileSync} from 'node:fs';
+import type {Journal,SourceDocument,BalanceReconciliation} from '../../lib/accounting/types';
+let checks=0;const ok=(value:unknown,message:string)=>{assert.ok(value,message);checks++;};const throws=(f:()=>unknown,match:RegExp)=>{assert.throws(f,match);checks++;};
+const c=generateCompany(),initial=initialState(),fixed='2026-09-07T00:00:00Z';
+let s=initial;
+const sales=c.exercises.find(e=>e.id==='EX-SALE')!;
+const manual={...sales.expected[0],id:'USR-SALE-TEST',origin:'learner' as const};
+s=applyCommand(s,{type:'postJournal',journal:manual},fixed);ok(gradeExercise(sales,s).correct,'Independent journal grades correctly');ok(!gradeExercise(sales,s).assisted,'Independent work is not marked assisted');
+const wrongSource=structuredClone(s);wrongSource.journals[0].sourceId='SI-12-001';ok(!gradeExercise(sales,wrongSource).correct,'Wrong invoice reference is detected');
+throws(()=>applyCommand(s,{type:'postJournal',journal:manual}),/already posted/);
+throws(()=>applyCommand(s,{type:'lockPeriod',locked:true,reason:'test'}),/Resolve before locking/);
+const reversal=applyCommand(s,{type:'reverseJournal',journalId:manual.id,date:'2025-12-08',reason:'Correct my reference'},fixed);ok(!gradeExercise(sales,reversal).correct,'Reversal reopens the task');ok(reversal.journals.length===2,'Reversal retains the original');
+s=applyCommand(reversal,{type:'applySolution',exerciseId:sales.id},fixed);ok(gradeExercise(sales,s).correct,'Worked answer can replace a fully reversed attempt');
+for(const e of c.exercises)if(e.id!==sales.id)s=applyCommand(s,{type:'applySolution',exerciseId:e.id},fixed);
+ok(integrityChecks(c,s).every(x=>x.difference===0),'All worked answers complete the final controls');
+const matches:{bankId:string;journalIds:string[]}[]=[];for(const row of c.bank.filter(r=>r.date.startsWith('2025-12'))){const js=suggestedBankMatches(c,s,row.id).filter(j=>j.sourceId===row.reference&&j.date===row.date);ok(js.length===1,`Unique supported candidate for ${row.id}`);matches.push({bankId:row.id,journalIds:[js[0].id]});}
+// A reversed source journal has zero net effect but remains a cash-book transaction only where relevant.
+s=applyCommand(s,{type:'matchBankBatch',matches},fixed);const bank=bankReconciliation(c,s);ok(bank.complete,'All statement lines reconcile after posting adjustments');ok(bank.outstandingDeposits===180000&&bank.outstandingPayments===0,'Deposit in transit is the sole remaining reconciling item');
+throws(()=>applyCommand(s,{type:'matchBankBatch',matches}),/already matched/);
+s=applyCommand(s,{type:'lockPeriod',locked:true,reason:'All case entries and bank reconciliation reviewed.'},fixed);ok(s.periodLocked,'Final period locks');
+throws(()=>applyCommand(s,{type:'postJournal',journal:{...manual,id:'LOCK-TEST'}}),/locked/);
+throws(()=>applyCommand(s,{type:'unmatchBank',bankId:matches[0].bankId}),/Reopen/);
+const accrual=s.journals.find(j=>j.exerciseId==='EX-ACCRUAL'&&!j.reverses)!;
+s=applyCommand(s,{type:'reverseJournal',journalId:accrual.id,date:'2026-01-01',reason:'Reverse the December accrual for January invoice processing.'},fixed);ok(gradeExercise(c.exercises.find(e=>e.id==='EX-ACCRUAL')!,s).correct,'A next-period reversal preserves the December grade');
+ok(bankReconciliation(c,s).complete,'January reversal does not change December reconciliation');
+ok(validateBackup(s)===null,'Complete backup validates');
+const invalidBackup=structuredClone(s);invalidBackup.bankMatches[matches[0].bankId]=['MISSING'];ok(validateBackup(invalidBackup)!==null,'Invalid bank references rejected in backup');
+const restored=applyCommand(initial,{type:'importBackup',state:s},fixed);ok(restored.journals.length===s.journals.length&&restored.periodLocked,'Restore preserves journal and lock state');
+let fresh=initialState();const invoice:SourceDocument={id:'MY-INV-TEST',kind:'Sales invoice',date:'2025-12-20',dueDate:'2026-01-19',party:c.contacts[0].name,title:'Test service invoice',lines:[{description:'Professional installation',quantity:2,unitPrice:15000,net:30000,tax:3000,account:'4010'}],net:30000,tax:3000,total:33000,notes:['Test'],journalIds:['MY-INV-JOURNAL'],metadata:{contactId:'C1'}};
+const ij:Journal={id:'MY-INV-JOURNAL',date:invoice.date,description:'Test invoice',reference:invoice.id,sourceId:invoice.id,module:'Sales',lines:invoiceJournalLines(invoice,c)};
+fresh=applyCommand(fresh,{type:'postDocument',document:invoice,journal:ij},fixed);ok(fresh.customDocuments.length===1&&fresh.journals.length===1,'Invoice and journal post together');
+throws(()=>applyCommand(initial,{type:'postDocument',document:invoice,journal:{...ij,lines:[dr('1000',33000),cr('4000',33000)]}}),/does not match/);
+const badTax=structuredClone(invoice);badTax.lines[0].tax=1000;throws(()=>invoiceJournalLines(badTax,c),/GST/);
+const exported=journalCSV([ij]),imported=importJournalCSV(exported,c,new Set());ok(imported.journals.length===1&&imported.journals[0].sourceId===invoice.id,'CSV roundtrip retains source link');
+ok(JSON.stringify(imported.journals[0].lines)===JSON.stringify(ij.lines),'CSV roundtrip retains cents and contacts');
+throws(()=>importJournalCSV(exported,c,new Set([ij.id])),/already exists/);
+throws(()=>importJournalCSV(exported.replace('330.00','330.01'),c,new Set()),/balance/);
+ok(parseCSV('A,B\r\n"one, two","say ""hello"""\r\n')[1][1]==='say "hello"','CSV handles quotes, commas and CRLF');
+const untouched=JSON.stringify(initial);throws(()=>applyCommand(initial,{type:'importJournals',journals:[ij,{...ij,id:'BAD',lines:[dr('1000',1),cr('4000',2)]}]}),/balance/);ok(JSON.stringify(initial)===untouched,'Failed batch leaves prior state untouched');
+fresh=applyCommand(fresh,{type:'saveWorkpaper',workpaper:{id:'A-01',conclusion:'Agreed the test invoice and control balances.',preparer:'Learner',reviewer:'Practice reviewer',prepared:true,reviewed:true,evidence:['TB-OPEN'],updatedAt:fixed}},fixed);ok(fresh.workpapers['A-01'].reviewed,'Complete workpaper can be reviewed');fresh=applyCommand(fresh,{type:'postJournal',journal:{id:'NEXT',date:'2025-12-31',description:'Additional journal',reference:'TEST',module:'Manual journal',lines:[dr('6220',10000),cr('2100',10000)]}},fixed);ok(!fresh.workpapers['A-01'].reviewed,'Later financial changes invalidate review status');
+const solved=initialState();solved.journals=c.exercises.flatMap(e=>e.expected.map(j=>({...j,id:'SOL-'+j.id,origin:'solution' as const})));const bs=financialPosition(journalsFor(c,solved)),as=assetSchedule(c),inv=inventorySchedule(c,solved),lease=leaseSchedule(c),tax=taxBridge(c,solved);
+ok(sum(as.map(a=>a.carryingValue))===bs.balances['1500']+bs.balances['1510'],'Asset schedule agrees to final ledger');
+ok(sum(inv.map(i=>i.netValue))===bs.balances['1200']+bs.balances['1210'],'Inventory schedule agrees to final ledger');
+ok(lease.rows.at(-1)!.closing===0,'Lease amortises to zero after rounding correction');ok(lease.currentPortion===-bs.balances['2530'],'Lease current portion agrees');
+ok(tax.expectedTax===bs.balances['6800'],'Tax bridge reproduces the tax expense');ok(tax.dta===bs.balances['1600']&&tax.dtl===-bs.balances['2610'],'Deferred tax schedule agrees');
+for(const contact of c.contacts){const d=c.documents.find(d=>d.id===`STMT-${contact.id}-2025-12`)!;ok(sum(d.lines.map(l=>l.net))===d.total,'External statement components agree');}
+for(const lesson of LESSONS)ok(sum(lesson.example.lines.map(l=>l.debit-l.credit))===0,`${lesson.id} lesson example balances`);
+const cashTransfer:Journal={id:'PETTY',date:'2025-12-31',description:'Petty cash float transfer',reference:'PETTY',module:'Cash',lines:[dr('1010',10000),cr('1000',10000)]};ok(cashFlow([c.opening,cashTransfer]).direct.operating===0,'Internal cash transfer excluded from cash flows');
+
+// Independent statements expose omitted postings and reconcile after the close.
+for(const kind of ['customer','supplier'] as const){
+ const before=statementReconciliations(c,initial,kind),after=statementReconciliations(c,solved,kind);
+ ok(before.some(r=>r.difference!==0),`${kind} external evidence detects missing invoices`);
+ ok(after.every(r=>r.difference===0),`${kind} statements agree after all source transactions are posted`);
+ for(const r of before)ok(r.componentDifference===r.difference,'Statement item differences explain the total');
+}
+// Use a separate fictional credit with remittance instructions for allocation testing.
+const creditJournal:Journal={id:'CREDIT-TEST',date:'2025-12-31',description:'Customer on-account receipt with test allocation instructions',reference:'TEST-REMIT',sourceId:'TEST-REMIT',module:'Receipts',lines:[dr('1000',20000),cr('1100',20000,'C1')]};
+let allocated=applyCommand(fresh,{type:'postJournal',journal:creditJournal},fixed);
+const baseAllocation={id:'ALLOC-TEST',kind:'customer' as const,contactId:'C1',sourceJournalId:creditJournal.id,invoiceId:invoice.id,date:'2025-12-31',amount:10000,createdAt:fixed};
+const beforeAllocation=subledger(c,allocated,'customer'),beforeControl=beforeAllocation.control;
+allocated=applyCommand(allocated,{type:'allocateCredit',allocation:baseAllocation},fixed);
+const afterAllocation=subledger(c,allocated,'customer'),allocatedInvoice=afterAllocation.invoices.find(i=>i.document.id===invoice.id)!;
+ok(afterAllocation.control===beforeControl,'Credit allocation leaves the control account unchanged');
+ok(allocatedInvoice.open===23000&&allocatedInvoice.allocated===10000,'Partial allocation reduces only the selected invoice');
+ok(afterAllocation.onAccount===beforeAllocation.onAccount+10000,'Applied credit is removed from on-account amount');
+ok(afterAllocation.contacts.find(x=>x.contact.id==='C1')!.credits.find(x=>x.journal.id===creditJournal.id)!.available===10000,'Unused credit remains available');
+throws(()=>applyCommand(allocated,{type:'allocateCredit',allocation:{...baseAllocation,id:'TOO-MUCH',amount:10001}}),/unused credit/);
+throws(()=>applyCommand(allocated,{type:'allocateCredit',allocation:{...baseAllocation,id:'WRONG-PARTY',contactId:'C2'}}),/same contact/);
+throws(()=>applyCommand(allocated,{type:'allocateCredit',allocation:{...baseAllocation,id:'EARLY',date:'2025-12-19'}}),/precede/);
+throws(()=>applyCommand(allocated,{type:'reverseJournal',journalId:creditJournal.id,date:'2025-12-31',reason:'Reverse allocated credit'}),/Remove the linked/);
+ok(validateBackup(allocated)===null,'Backup retains valid partial allocations');
+const badAllocation=structuredClone(allocated);badAllocation.allocations![0].amount=20001;ok(validateBackup(badAllocation)!==null,'Backup cannot inflate an allocated credit');
+allocated=applyCommand(allocated,{type:'removeAllocation',allocationId:baseAllocation.id},fixed);ok(subledger(c,allocated,'customer').invoices.find(i=>i.document.id===invoice.id)!.open===33000,'Undo allocation restores the invoice');
+allocated=applyCommand(allocated,{type:'saveDisclosure',disclosure:{id:'07',text:'Reviewed the invoice aging and remittance evidence.',completed:true,updatedAt:fixed}},fixed);ok(allocated.disclosures?.['07'].completed,'A supported disclosure assessment can be completed');
+allocated=applyCommand(allocated,{type:'postJournal',journal:{...creditJournal,id:'CREDIT-SECOND',sourceId:'TEST-SECOND'}},fixed);ok(!allocated.disclosures?.['07'].completed,'A new posting reopens disclosure assessments');
+throws(()=>applyCommand(allocated,{type:'saveDisclosure',disclosure:{id:'99',text:'Invalid reference',completed:false,updatedAt:fixed}}),/invalid/);
+throws(()=>applyCommand(allocated,{type:'saveDisclosure',disclosure:{id:'01',text:'',completed:true,updatedAt:fixed}}),/Write your assessment/);
+const notes=financialNotes(c,solved);ok(notes.length===18,'Complete numbered financial note set generated');
+for(const note of notes)for(const table of note.tables)for(const r of table.rows)ok(r.values.length===table.columns.length&&r.values.every(Number.isSafeInteger),`Note ${note.id} numeric table is complete and uses integer cents`);
+const note10=notes.find(n=>n.id==='10')!.tables[0];for(let i=0;i<3;i++)ok(sum(note10.rows.slice(0,-1).map(r=>r.values[i]))===note10.rows.at(-1)!.values[i],'Owned asset rollforward reconciles each column');
+for(const id of ['13','14']){const note=notes.find(n=>n.id===id)!;for(const table of note.tables.filter(t=>/movement|rollforward/.test(t.title)))ok(sum(table.rows.slice(0,-1).map(r=>r.values[0]))===table.rows.at(-1)!.values[0],'Provision and debt rollforwards reconcile');}
+const liquidity=notes.find(n=>n.id==='16')!.tables[0];ok(liquidity.rows[0].values[0]!==0&&liquidity.rows[1].values[0]!==0,'Current-position classification includes operating assets and liabilities');
+const loanClassification=notes.find(n=>n.id==='14')!.tables[0];ok(loanClassification.rows[0].values[0]===-bs.balances['2510']&&loanClassification.rows[1].values[0]===-bs.balances['2500'],'Current and non-current loan note maps correct accounts');
+for(const from of ['2025-01-01','2025-12-01'])ok(equityMovement(journalsFor(c,solved),from,'2025-12-31').difference===0,'Equity changes reconcile for annual and monthly reporting');
+const yearEndNoteBefore=financialNotes(c,solved).find(n=>n.id==='12')!.tables[0].rows.find(r=>r.label==='Accrued expenses')!.values[0];
+const withJanuary={...solved,journals:[...solved.journals,{...accrual,id:'AFS-JAN-REV',date:'2026-01-01',lines:accrual.lines.map(l=>({...l,debit:l.credit,credit:l.debit}))}]};
+ok(financialNotes(c,withJanuary).find(n=>n.id==='12')!.tables[0].rows.find(r=>r.label==='Accrued expenses')!.values[0]===yearEndNoteBefore,'January reversal cannot change December note balances');
+const afs=financialStatementsHTML(c,solved);ok(!afs.includes('NaN')&&!afs.includes('undefined'),'AFS export contains no invalid numerical values');ok(afs.includes('18. Subsequent events')&&afs.includes('31 Dec 2024'),'AFS export includes all notes and comparatives');writeFileSync('/tmp/ledgerlab-afs-check.html',afs);
+ok(defaultEvidenceRequests().length===16,'The evidence register covers sixteen preparation requests');
+ok(validateBackup(initialState())===null,'Default evidence references are valid');
+const request=evidenceRequests(initial)[0];
+throws(()=>applyCommand(initial,{type:'saveEvidenceRequest',request:{...request,status:'Reviewed'}}),/documented conclusion/);
+throws(()=>applyCommand(initial,{type:'saveEvidenceRequest',request:{...request,status:'Not applicable'}}),/Explain why/);
+const reviewed=applyCommand(initial,{type:'saveEvidenceRequest',request:{...request,status:'Reviewed',notes:'Agreed the signed opening trial balance and reviewed the supplied policy memo.'}},fixed);
+ok(evidenceRequests(reviewed).find(r=>r.id===request.id)?.status==='Reviewed','Evidence review saves its conclusion and links');
+ok(validateBackup(reviewed)===null,'Evidence requests survive a valid backup');
+throws(()=>applyCommand(initial,{type:'saveEvidenceRequest',request:{...request,evidence:['NO-SUCH-DOCUMENT']}}),/document links/);
+
+const template=journalTemplates(initial)[0];let templated=applyCommand(initial,{type:'saveJournalTemplate',template:{...template,id:'MY-TEMPLATE',name:'My utilities accrual'}},fixed);ok(templated.journals.length===0&&journalTemplates(templated).length===7,'Saving a template does not post a financial entry');
+throws(()=>applyCommand(initial,{type:'saveJournalTemplate',template:{...template,lines:[dr('6110',1),cr('2100',2)]}}),/balance/);
+templated=applyCommand(templated,{type:'deleteJournalTemplate',templateId:'MY-TEMPLATE'},fixed);ok(journalTemplates(templated).length===6,'Template removal leaves the ledger unchanged');
+const reversalSources=solved.journals.filter(j=>['EX-ACCRUAL','EX-UNBILLED'].includes(j.exerciseId??''));
+const batchReversed=applyCommand(solved,{type:'reverseJournalBatch',journalIds:reversalSources.map(j=>j.id),date:'2026-01-01',reason:'Reverse supported December accruals.'},fixed);ok(batchReversed.journals.length===solved.journals.length+2,'Reversal batch creates every selected reversal');ok(integrityChecks(c,batchReversed).every(x=>x.difference===0),'Next-period reversal batch preserves the December close');
+const unchangedBatch=JSON.stringify(solved);throws(()=>applyCommand(solved,{type:'reverseJournalBatch',journalIds:[reversalSources[0].id,'MISSING'],date:'2026-01-01',reason:'Invalid batch'}),/Only your practice/);ok(JSON.stringify(solved)===unchangedBatch,'Invalid reversal batch is atomic');
+throws(()=>applyCommand(solved,{type:'reverseJournal',journalId:reversalSources[0].id,date:'2025-12-01',reason:'Too early'}),/cannot precede/);
+const item=c.inventory[0],supplier=c.contacts.find(p=>p.kind==='supplier')!;let stockPractice=initialState();const stockBefore=inventorySchedule(c,stockPractice).find(i=>i.id===item.id)!.bookQty;
+function stockDocument(id:string,kind:SourceDocument['kind'],quantity:number):SourceDocument{const sales=kind==='Sales invoice'||kind==='Credit note',unitPrice=sales?item.price:item.cost,net=quantity*unitPrice,tax=Math.round(net/10);return {id,kind,date:'2025-12-31',dueDate:'2026-01-30',party:sales?c.contacts[0].name:supplier.name,title:id,lines:[{description:item.name,quantity,unitPrice,net,tax,account:sales?(kind==='Credit note'?'4020':'4000'):'1200',itemId:item.id}],net,tax,total:net+tax,notes:['Physical stock movement in a supplemental practice scenario.'],journalIds:['J-'+id],metadata:{contactId:sales?'C1':supplier.id}};}
+function postStock(d:SourceDocument){const j:Journal={id:d.journalIds[0],date:d.date,description:d.title,reference:d.id,sourceId:d.id,module:'Stock test',lines:invoiceJournalLines(d,c)};stockPractice=applyCommand(stockPractice,{type:'postDocument',document:d,journal:j},fixed);return j;}
+const stockSale=stockDocument('MY-STOCK-SALE','Sales invoice',2),stockJournal=postStock(stockSale);ok(stockJournal.lines.some(l=>l.account==='5000'&&l.debit===item.cost*2),'Stock sale records cost of sales automatically');ok(inventorySchedule(c,stockPractice).find(i=>i.id===item.id)!.bookQty===stockBefore-2,'Stock sale reduces recorded quantity');
+postStock(stockDocument('MY-STOCK-RETURN','Credit note',1));ok(inventorySchedule(c,stockPractice).find(i=>i.id===item.id)!.bookQty===stockBefore-1,'Customer return restores one physical unit');
+postStock(stockDocument('MY-STOCK-BUY','Supplier invoice',3));postStock(stockDocument('MY-SUPPLIER-RETURN','Supplier credit note',1));ok(inventorySchedule(c,stockPractice).find(i=>i.id===item.id)!.bookQty===stockBefore+1,'Supplier return reduces purchased quantity and inventory');
+const sb=accountBalances(journalsFor(c,stockPractice)),ob=accountBalances(journalsFor(c,initial));ok(sb['1200']-ob['1200']===item.cost,'Stock financial value agrees with the net one-unit movement');ok(sb['5000']-ob['5000']===item.cost,'Cost of sales agrees with net goods sold');
+ok(validateBackup(stockPractice)===null,'Stock invoices and both kinds of credit note survive backup validation');
+const stockCSV=importJournalCSV(journalCSV([stockJournal]),c,new Set()).journals[0];ok(JSON.stringify(stockCSV.lines)===JSON.stringify(stockJournal.lines),'Journal CSV retains inventory item references');
+const wrongStock=stockDocument('MY-WRONG-COST','Supplier invoice',1);wrongStock.lines[0].unitPrice+=1;wrongStock.lines[0].net+=1;wrongStock.net+=1;wrongStock.total+=1;throws(()=>invoiceJournalLines(wrongStock,c),/fixed purchase cost/);
+const wrongTags=stockDocument('MY-WRONG-TAG','Sales invoice',1),wrongTagJournal={id:wrongTags.journalIds[0],date:wrongTags.date,description:wrongTags.title,reference:wrongTags.id,sourceId:wrongTags.id,module:'Test',lines:invoiceJournalLines(wrongTags,c).map(l=>l.itemId?{...l,itemId:c.inventory[1].id}:l)};throws(()=>applyCommand(initial,{type:'postDocument',document:wrongTags,journal:wrongTagJournal}),/item labels/);
+const corruptInvoice=structuredClone(stockPractice);corruptInvoice.customDocuments[0].journalIds=['MISSING'];ok(validateBackup(corruptInvoice)!==null,'Backup rejects an orphaned invoice');
+
+const reconciliation:BalanceReconciliation={account:'2100',asOf:'2025-12-31',items:[{id:'ELEC',description:'December electricity from January invoice review',amount:94000,documentId:'ACCRUAL-MEMO'},{id:'FEES',description:'December accounting services',amount:350000,documentId:'ACCRUAL-MEMO'}],conclusion:'Recalculated the December service accrual from the subsequent invoice review and agreed cut-off.',preparer:'Learner',reviewer:'Practice reviewer',prepared:true,reviewed:true,updatedAt:fixed};
+let reconciled=applyCommand(solved,{type:'saveBalanceReconciliation',reconciliation},fixed);ok(reconciliationResult(c,reconciled,reconciliation).difference===0,'Independently supported accrual components agree to the liability');ok(reconciled.balanceReconciliations?.['2100|2025-12-31'].reviewed,'A complete and agreed reconciliation can be reviewed');
+throws(()=>applyCommand(solved,{type:'saveBalanceReconciliation',reconciliation:{...reconciliation,items:[{...reconciliation.items[0],amount:1}]}}),/must agree/);
+throws(()=>applyCommand(solved,{type:'saveBalanceReconciliation',reconciliation:{...reconciliation,items:reconciliation.items.map(i=>({...i,documentId:'UNKNOWN'}))}}),/existing evidence/);
+ok(validateBackup(reconciled)===null,'Saved balance reconciliations restore with their evidence and sign-offs');
+reconciled=applyCommand(reconciled,{type:'postJournal',journal:{id:'RECON-CHANGE',date:'2025-12-31',description:'Additional supported accrual',reference:'TEST',module:'Manual',lines:[dr('6110',10000),cr('2100',10000)]}},fixed);ok(!reconciled.balanceReconciliations?.['2100|2025-12-31'].reviewed,'A subsequent posting reopens the reconciliation review');ok(reconciliationResult(c,reconciled,reconciliation).difference===10000,'The new ledger movement creates the correct reconciliation difference');
+writeFileSync('/tmp/ledgerlab-report-backup.json',JSON.stringify({format:'LedgerLab backup',version:1,state:{...reconciled,journals:[...reconciled.journals,...stockPractice.journals],customDocuments:stockPractice.customDocuments}},null,2));
+writeFileSync('/tmp/ledgerlab-export-check.zip',sourcePack(c,initial));writeFileSync('/tmp/ledgerlab-path-check.zip',zipFiles([{name:'../../escape.txt',content:'safe'},{name:'data/quoted.csv',content:exported}]));
+console.log(`PASS: ${checks} workflow, import, state, reference, schedule and close-control checks.`);
