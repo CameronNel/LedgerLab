@@ -1,0 +1,98 @@
+name: Apply verified LedgerLab 3.2 pass
+on:
+  push:
+    branches: [ux/clearer-daily-workspace]
+    paths: [.github/workflows/apply-clarity-pass.yml]
+permissions:
+  contents: write
+jobs:
+  apply:
+    if: github.repository == 'CameronNel/LedgerLab'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22.16.0
+      - name: Download and verify source-only patch
+        shell: python
+        run: |
+          import hashlib, io, json, os, re, subprocess, urllib.request, urllib.parse, zipfile
+          from html.parser import HTMLParser
+          assert os.environ['GITHUB_REPOSITORY'] == 'CameronNel/LedgerLab'
+          assert subprocess.check_output(['git','rev-parse','HEAD^']).decode().strip() == 'f1b7f316da2028316b013c05ec3bf2403e7a92a8', 'Unexpected branch baseline'
+          SHARE='H3NtnlcNqK-p'
+          NAME='ledgerlab-3.2-source-patch.zip'
+          def read(url, method='GET', limit=10000000):
+              req=urllib.request.Request(url, method=method, headers={'User-Agent':'LedgerLab verified public source transfer'})
+              with urllib.request.urlopen(req,timeout=60) as response: data=response.read(limit+1)
+              assert len(data)<=limit
+              return data
+          sources=[]
+          class Scripts(HTMLParser):
+              def handle_starttag(self,tag,attrs):
+                  attrs=dict(attrs)
+                  if tag=='script' and attrs.get('src'): sources.append(attrs['src'])
+          Scripts().feed(read('https://firestorage.ai/ja/f/'+SHARE).decode())
+          api=None
+          for src in sources:
+              if any(skip in src for skip in ['polyfills','webpack','main-app','4bd1b696','3794-']): continue
+              url=urllib.parse.urljoin('https://firestorage.ai',src)
+              assert urllib.parse.urlparse(url).hostname=='firestorage.ai'
+              script=read(url).decode()
+              if '/files/${e.fileId}/download' not in script: continue
+              match=re.search(r'\bf\s*=\s*[\"\x27]([^\"\x27]+)[\"\x27]',script)
+              if match: api=match.group(1)
+              break
+          assert api, 'No reviewed download interface'
+          parsed=urllib.parse.urlparse(api)
+          assert parsed.scheme=='https' and (parsed.hostname=='firestorage.ai' or parsed.hostname.endswith('.firestorage.ai'))
+          endpoint=api.rstrip('/')+'/shares/'+SHARE
+          listing=json.loads(read(endpoint+'/files?maxResults=1000'))
+          files=[f for f in listing['files'] if f.get('fileName')==NAME]
+          assert len(files)==1 and not listing.get('passwordProtected')
+          file_id=files[0]['fileId'];assert re.fullmatch(r'[A-Za-z0-9_-]+',file_id)
+          link=json.loads(read(endpoint+'/files/'+file_id+'/download','POST'))['downloadUrl']
+          assert urllib.parse.urlparse(link).scheme=='https'
+          raw=read(link,limit=1000000)
+          assert len(raw)==57722 and hashlib.sha256(raw).hexdigest()=='67e69159a15ef47ccd8f09c55f1a017bde9d88573398b34a4c2d0c2e3c9fe3f9'
+          with zipfile.ZipFile(io.BytesIO(raw)) as archive:
+              assert sorted(archive.namelist())==['changes.patch','manifest.json']
+              assert sum(i.file_size for i in archive.infolist())<2000000
+              patch=archive.read('changes.patch');meta=json.loads(archive.read('manifest.json'))
+          assert meta['base_commit']=='f1b7f316da2028316b013c05ec3bf2403e7a92a8'
+          assert hashlib.sha256(patch).hexdigest()=='98549d0db55c3334b6fa67ab9f1e8fd2bd23a067bb7b1f33331ccdfd4a037d4c'
+          open('/tmp/ledgerlab-reviewed.patch','wb').write(patch)
+          subprocess.run(['git','apply','--check','/tmp/ledgerlab-reviewed.patch'],check=True)
+          subprocess.run(['git','apply','/tmp/ledgerlab-reviewed.patch'],check=True)
+          subprocess.run(['git','rm','public/offline/LedgerLab-Workstation-v3.1.html'],check=True)
+          print('Verified and applied exact source patch. No financial case data or credentials transferred.')
+      - run: npm install --global typescript@5.8.3 @types/node@22.19.19 --ignore-scripts --no-audit --no-fund
+      - name: Verify logic and rebuild exact standalone
+        run: |
+          tsc -p tsconfig.standalone.json
+          node scripts/desktop/check-source-syntax.mjs
+          node scripts/accounting/run-portable.mjs
+          node scripts/desktop/bundle.mjs public/offline/LedgerLab-Workstation.html
+          echo '11bdd88571b64ee81a69eceffe5bcd824a2f3a0a2996fa7bc0f3496b705fef88  public/offline/LedgerLab-Workstation.html' | sha256sum --check
+      - name: Verify source inventory and commit only reviewed tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          mv .github/workflows/apply-clarity-pass.yml /tmp/apply-clarity-pass.yml
+          python scripts/accounting/package-source.py
+          python -c "import zipfile; z=zipfile.ZipFile('public/offline/ledgerlab-source-code.zip'); open('SOURCE-MANIFEST.json','wb').write(z.read('LedgerLab/SOURCE-MANIFEST.json'))"
+          python scripts/accounting/package-check.py
+          git add -A
+          test "$(git write-tree)" = d0c4a78e85fee55e7b7b4aaa13a44612435fd1ec
+          mv /tmp/apply-clarity-pass.yml .github/workflows/apply-clarity-pass.yml
+          git add .github/workflows/apply-clarity-pass.yml
+          test "$(git ls-remote origin refs/heads/ux/clearer-daily-workspace | cut -f1)" = "$GITHUB_SHA"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Implement LedgerLab 3.2 focused tasks, safe local saves, native dialogs and ledger diagnostics'
+          git push origin HEAD:refs/heads/ux/clearer-daily-workspace
+          echo 'Reviewed source tree and standalone checksums verified; full application/browser CI follows importer removal.' >> "$GITHUB_STEP_SUMMARY"
