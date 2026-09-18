@@ -1,0 +1,33 @@
+name: Diagnose simultaneous offline saves
+on:
+  push:
+    branches: [ux/clearer-daily-workspace]
+    paths: [.github/workflows/check-storage-race.yml]
+permissions:
+  contents: read
+jobs:
+  race:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22.16.0
+      - name: Add diagnostic output to the temporary test copy only
+        shell: python
+        run: |
+          from pathlib import Path
+          p=Path('scripts/desktop/check-local-storage.py');s=p.read_text()
+          s=s.replace("    page.evaluate('()=>{window.race=", "    print('BEFORE A',page.evaluate('({revision:ledgerlabPreview.session.getSnapshot().revision,problem:ledgerlabPreview.session.getSnapshot().problem,loading:ledgerlabPreview.session.getSnapshot().loading,notes:ledgerlabPreview.session.getSnapshot().notebook})'),flush=True)\n    print('BEFORE B',second.evaluate('({revision:ledgerlabPreview.session.getSnapshot().revision,problem:ledgerlabPreview.session.getSnapshot().problem,loading:ledgerlabPreview.session.getSnapshot().loading,notes:ledgerlabPreview.session.getSnapshot().notebook})'),flush=True)\n    page.evaluate('()=>{window.race=")
+          s=s.replace("    ck(sum(bool(r['ok']) for r in [a,b])==1", "    print('RACE RESULTS',a,b,flush=True)\n    print('AFTER A',page.evaluate('({revision:ledgerlabPreview.session.getSnapshot().revision,stored:localStorage.getItem(\"ledgerlab-finance-pc-preview-v1\")?.slice(0,250)})'),flush=True)\n    print('AFTER B',second.evaluate('({revision:ledgerlabPreview.session.getSnapshot().revision,stored:localStorage.getItem(\"ledgerlab-finance-pc-preview-v1\")?.slice(0,250)})'),flush=True)\n    ck(sum(bool(r['ok']) for r in [a,b])==1")
+          p.write_text(s)
+      - run: python -m pip install playwright==1.55.0
+      - run: python -m playwright install --with-deps chromium
+      - name: Repeat real-origin competing-writer test
+        run: |
+          export CHROMIUM=$(python -c 'from playwright.sync_api import sync_playwright; p=sync_playwright().start(); print(p.chromium.executable_path); p.stop()')
+          for i in $(seq 1 10); do
+            echo "STORAGE STRESS ITERATION $i"
+            python scripts/desktop/check-local-storage.py public/offline/LedgerLab-Workstation.html /tmp/storage-race-$i
+          done
