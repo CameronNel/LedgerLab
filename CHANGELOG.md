@@ -11,6 +11,7 @@
 - Extracted desktop icon rendering and new search/menu/review/inspection responsibilities into separate modules; retained the existing window-manager implementation.
 - Organized documentation into current, architecture and historical sections.
 - Added 87 domain assertions and 39 Chromium interaction assertions for the new features.
+- Fixed the sidebar collapse-state type and aligned the full-app TypeScript target with ES2022; dependency-backed type checking passed on GitHub.
 - Kept the accounting engine, tax assumptions, storage schema and hosted deployment unchanged.
 
 ## Earlier source releases

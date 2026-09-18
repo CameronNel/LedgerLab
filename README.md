@@ -49,7 +49,7 @@ npm run typecheck:standalone
 node scripts/desktop/bundle.mjs public/offline/LedgerLab-Workstation-v3.1.html
 ```
 
-See the verification record for actual executed browser commands and for the unresolved full React/hosting checks. Syntax transpilation and standalone type checking are not a production build.
+See the verification record for actual executed browser commands and for the separate full-application and hosting checks. Syntax transpilation and standalone type checking are not a production build.
 
 ## Protect your practice
 

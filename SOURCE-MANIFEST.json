@@ -23,13 +23,13 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 1302,
-      "sha256": "9660a162c0672710127483bf7ad33c096651a8a28beb059d892dc0e79f92fc0e"
+      "bytes": 1448,
+      "sha256": "8a97016dcbe49d311e0ea9afec9ef3fac4bd8489ee37ea95650d112414b63e48"
     },
     {
       "path": "CHATGPT-START-HERE.md",
-      "bytes": 1180,
-      "sha256": "8917fb36af49cb6b4276cd09775b27d4aa90a51157a441bbedf6af8cb3594064"
+      "bytes": 1248,
+      "sha256": "56773c654c327ade6683278d7e5a2f6ee64d323c1807d4f097c8a3bc818fb1bb"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -38,8 +38,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 4104,
-      "sha256": "e4af4f270fe9e5f70a09f04e0084cff03237abab0a6b68414bcf3d01f4b305c0"
+      "bytes": 4112,
+      "sha256": "e91078e41d5b84095acb83e98ca895384f71c40ae455d053656578f796be7513"
     },
     {
       "path": "app/api/workspace/route.ts",
@@ -83,8 +83,8 @@
     },
     {
       "path": "components/ledgerlab/app.tsx",
-      "bytes": 15367,
-      "sha256": "35a9716bd1c4203568de5d96ecf3af827098b935f03a10fc813757c933843e39"
+      "bytes": 15375,
+      "sha256": "acbb545df520068e5df5cfee8fe68e01c045b3dd0726c6d23915d27d80dc9b74"
     },
     {
       "path": "components/ledgerlab/balance-reconciliation.tsx",
@@ -613,13 +613,13 @@
     },
     {
       "path": "docs/current/guide.md",
-      "bytes": 4436,
-      "sha256": "0d762398e0ae10811cb2d5045042661ecf5ac87f1c7b0db2a009e9b1493c3395"
+      "bytes": 4475,
+      "sha256": "5ee3962eee1d3f3cd36915f7cfe0bb1968d2118cc2d1843cd4a3ad6f3a4f4398"
     },
     {
       "path": "docs/current/verification.md",
-      "bytes": 3969,
-      "sha256": "63880c5f55fd4fed880cf2218da41ef91bfc42d00db96b2e2b051951a93dce7d"
+      "bytes": 4157,
+      "sha256": "3985aa20d5f2e36a8c69517f4d94d2a3b36959d22acbca50e3c0537198a2a152"
     },
     {
       "path": "drizzle.config.ts",
@@ -1194,7 +1194,7 @@
     {
       "path": "tsconfig.json",
       "bytes": 666,
-      "sha256": "be18523b23b78b6e1a876ddd107d330f0168bddf09d751b57e0b5edce69c66f3"
+      "sha256": "11202a9617d340bfb4ec86b96575249a44fd8891db07935ce7f2774ebfba91d6"
     },
     {
       "path": "tsconfig.standalone.json",

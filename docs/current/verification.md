@@ -40,7 +40,7 @@ A populated-search Escape-key issue was found by the new browser driver, fixed, 
 
 ## Not verified or not delivered
 
-`npm run typecheck` was attempted but failed because full React/Next/Vinext and other locked dependencies are absent. This is not a full-app typecheck pass. The production build and hosted end-to-end smoke tests remain outstanding. No authentication, D1 binding or deployment audience was changed; the hosted app was not updated.
+Local full-app type checking initially lacked dependencies. GitHub CI then installed all 677 locked packages, exposed a too-narrow sidebar state type and the existing ES2017/worksheet-regex target mismatch, and both were fixed. A subsequent dependency-backed `npm run typecheck` passed on GitHub. Production build and hosted end-to-end smoke verification remain separate; consult the PR checks for their current status. No authentication, D1 binding or deployment audience was changed; the hosted app was not updated.
 
 Browser tests use `page.set_content`, real DOM interactions, actual session commands, memory fallback and explicit backups. They do not establish durable file-origin storage across browser restarts, native Microsoft Excel compatibility or real multi-user reviewer permissions.
 

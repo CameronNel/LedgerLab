@@ -38,6 +38,6 @@ Export backups before switching case/browser/file versions. Browser-local storag
 
 ## Current boundaries
 
-This cleanup preserves a single AUD 2025 training company and one open accounting period. It does not add future operating years, parallel periods, consolidation, FX, purchase-order matching or real multi-user approvals. The React wrapper uses the new shared registry, but full dependency-backed React/build and hosted end-to-end verification remain outstanding.
+This cleanup preserves a single AUD 2025 training company and one open accounting period. It does not add future operating years, parallel periods, consolidation, FX, purchase-order matching or real multi-user approvals. The React wrapper uses the new shared registry, and dependency-backed React type checking has passed on GitHub; production-build and hosted end-to-end verification remain separate.
 
 For the detailed simulation calendar and unchanged accounting scope, see the [archived day-by-day guide](../archive/2026-09-07/DAY-BY-DAY-V3.md).
