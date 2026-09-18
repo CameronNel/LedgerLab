@@ -23,9 +23,9 @@ jobs:
           import hashlib, io, json, os, re, subprocess, urllib.request, urllib.parse, zipfile
           from html.parser import HTMLParser
           assert os.environ['GITHUB_REPOSITORY'] == 'CameronNel/LedgerLab'
-          assert subprocess.check_output(['git','rev-parse','HEAD^']).decode().strip() == 'f1b7f316da2028316b013c05ec3bf2403e7a92a8', 'Unexpected branch baseline'
+          assert subprocess.check_output(['git','rev-parse','HEAD^']).decode().strip() == '8a48f6ee92c1201c8649f39b4a0b9ea9151aa53d', 'Unexpected branch baseline'
           SHARE='H3NtnlcNqK-p'
-          NAME='ledgerlab-3.2-source-patch.zip'
+          NAME='ledgerlab-3.2-final-patch.zip'
           def read(url, method='GET', limit=10000000):
               req=urllib.request.Request(url, method=method, headers={'User-Agent':'LedgerLab verified public source transfer'})
               with urllib.request.urlopen(req,timeout=60) as response: data=response.read(limit+1)
@@ -58,16 +58,17 @@ jobs:
           link=json.loads(read(endpoint+'/files/'+file_id+'/download','POST'))['downloadUrl']
           assert urllib.parse.urlparse(link).scheme=='https'
           raw=read(link,limit=1000000)
-          assert len(raw)==57722 and hashlib.sha256(raw).hexdigest()=='67e69159a15ef47ccd8f09c55f1a017bde9d88573398b34a4c2d0c2e3c9fe3f9'
+          assert len(raw)==57436 and hashlib.sha256(raw).hexdigest()=='de79355ffb288968af2e64c8011af82d9927b267e96dc5986e8bfa7e70d05308'
           with zipfile.ZipFile(io.BytesIO(raw)) as archive:
               assert sorted(archive.namelist())==['changes.patch','manifest.json']
               assert sum(i.file_size for i in archive.infolist())<2000000
               patch=archive.read('changes.patch');meta=json.loads(archive.read('manifest.json'))
           assert meta['base_commit']=='f1b7f316da2028316b013c05ec3bf2403e7a92a8'
-          assert hashlib.sha256(patch).hexdigest()=='98549d0db55c3334b6fa67ab9f1e8fd2bd23a067bb7b1f33331ccdfd4a037d4c'
+          assert hashlib.sha256(patch).hexdigest()=='2917a34ce5247453ba4d49fb0ba73426c2152d2216ff3deeb1ead5a9b83237e2'
           open('/tmp/ledgerlab-reviewed.patch','wb').write(patch)
-          subprocess.run(['git','apply','--check','/tmp/ledgerlab-reviewed.patch'],check=True)
-          subprocess.run(['git','apply','/tmp/ledgerlab-reviewed.patch'],check=True)
+          # Workflow edits are already committed through the authorized connector.
+          subprocess.run(['git','apply','--check','--exclude=.github/workflows/workspace-ci.yml','/tmp/ledgerlab-reviewed.patch'],check=True)
+          subprocess.run(['git','apply','--exclude=.github/workflows/workspace-ci.yml','/tmp/ledgerlab-reviewed.patch'],check=True)
           subprocess.run(['git','rm','public/offline/LedgerLab-Workstation-v3.1.html'],check=True)
           print('Verified and applied exact source patch. No financial case data or credentials transferred.')
       - run: npm install --global typescript@5.8.3 @types/node@22.19.19 --ignore-scripts --no-audit --no-fund
@@ -77,7 +78,7 @@ jobs:
           node scripts/desktop/check-source-syntax.mjs
           node scripts/accounting/run-portable.mjs
           node scripts/desktop/bundle.mjs public/offline/LedgerLab-Workstation.html
-          echo '11bdd88571b64ee81a69eceffe5bcd824a2f3a0a2996fa7bc0f3496b705fef88  public/offline/LedgerLab-Workstation.html' | sha256sum --check
+          echo '64d5c031c51e70c7f9324bba3109441fb6bb188bd7129d38ebaebd096746c2ac  public/offline/LedgerLab-Workstation.html' | sha256sum --check
       - name: Verify source inventory and commit only reviewed tree
         shell: bash
         run: |
@@ -87,7 +88,7 @@ jobs:
           python -c "import zipfile; z=zipfile.ZipFile('public/offline/ledgerlab-source-code.zip'); open('SOURCE-MANIFEST.json','wb').write(z.read('LedgerLab/SOURCE-MANIFEST.json'))"
           python scripts/accounting/package-check.py
           git add -A
-          test "$(git write-tree)" = d0c4a78e85fee55e7b7b4aaa13a44612435fd1ec
+          test "$(git write-tree)" = 221104e9bccfac1b88a5d108ec138f3d1fd6b22b
           mv /tmp/apply-clarity-pass.yml .github/workflows/apply-clarity-pass.yml
           git add .github/workflows/apply-clarity-pass.yml
           test "$(git ls-remote origin refs/heads/ux/clearer-daily-workspace | cut -f1)" = "$GITHUB_SHA"
