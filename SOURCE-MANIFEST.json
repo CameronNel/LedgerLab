@@ -968,8 +968,8 @@
     },
     {
       "path": "public/offline/LedgerLab-Workstation.html",
-      "bytes": 890683,
-      "sha256": "64d5c031c51e70c7f9324bba3109441fb6bb188bd7129d38ebaebd096746c2ac"
+      "bytes": 890742,
+      "sha256": "85f33dbf229754c270186bea23b953f1bfad320cae9675fd1e2d0ffc6d2825c3"
     },
     {
       "path": "public/offline/LedgerLab-finance-takeover-guide.html",
@@ -1118,8 +1118,8 @@
     },
     {
       "path": "scripts/desktop/check-local-storage.py",
-      "bytes": 7144,
-      "sha256": "adef339eb90be1a98310d6dc26c7515e0cc17993abcbe432ef99da781ced2211"
+      "bytes": 7155,
+      "sha256": "ed0ba4818ae9bdec6dbed7088c3a39513c763eb8d1cb6d7affab3af9091baa65"
     },
     {
       "path": "scripts/desktop/check-month-review.py",
@@ -1153,8 +1153,8 @@
     },
     {
       "path": "scripts/desktop/preview.ts",
-      "bytes": 7759,
-      "sha256": "25c64b433a9d72473ca2976eda24238dedfd4904764caaa668568789eebbdf9e"
+      "bytes": 7810,
+      "sha256": "36129f5e8292c43638f4e59704e899cf1935ba064025b85d78df729b6b066b38"
     },
     {
       "path": "scripts/install-ci.sh",

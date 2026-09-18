@@ -44,7 +44,7 @@ with TemporaryDirectory(prefix='ledgerlab-storage-profile-') as profile, sync_pl
     ck('not saved' in page.evaluate('ledgerlabPreview.model().error').lower(),'Quota error is explicit in save status')
     ck(page.evaluate('(key)=>localStorage.getItem(key)',KEY)==raw,'Quota failure preserves exact original stored bytes')
     ck(page.evaluate('ledgerlabPreview.model().state.notes')==backup['notes'],'Quota failure keeps last confirmed state')
-    page.evaluate('Storage.prototype.setItem=window.originalSetItem');page.evaluate('ledgerlabPreview.session.load()')
+    page.evaluate('() => { Storage.prototype.setItem=window.originalSetItem; }');page.evaluate('ledgerlabPreview.session.load()')
     # Cross-tab race: both tabs loaded same revision, only one may commit.
     second=ctx.new_page();second.goto(url);ready(second)
     page.evaluate('()=>{window.race=ledgerlabPreview.session.save({type:"saveNotes",notes:"First competing writer"})}')

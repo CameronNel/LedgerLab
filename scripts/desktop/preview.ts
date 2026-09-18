@@ -27,8 +27,12 @@ const transport:ConstructorParameters<typeof WorkspaceSession>[0]=async(_url,ini
     if(fault){fault=false;throw new Error('PREVIEW_DROP_ACK');}return Response.json(next);
   }catch(error){if((error as Error).message==='PREVIEW_DROP_ACK')throw error;return Response.json({error:(error as Error).message},{status:error instanceof LocalStoreError&&error.kind==='conflict'?409:400});}
 };
-const session=new WorkspaceSession((url,init)=>init?.method==='POST'&&store.mode==='browser'&&navigator.locks
-  ?navigator.locks.request(key,()=>transport(url,init)):transport(url,init));
+const session=new WorkspaceSession(async(url,init)=>{
+  if(init?.method==='POST'&&store.mode==='browser'&&navigator.locks){
+    return await navigator.locks.request(key,()=>transport(url,init));
+  }
+  return await transport(url,init);
+});
 let desktop:DesktopHandle;let reportingMonth='2025-07',lastActiveMonth='';
 function model():DesktopModel{const s=session.getSnapshot(),company=companyForState(s.state),active=s.state.career?.activeMonth??'2025-12';if(lastActiveMonth!==active){reportingMonth=active;lastActiveMonth=active;}return {company,state:s.state,journals:journalsFor(company,s.state),displayName:'Finance team',saving:s.saving,saveStatus:store.mode==='memory'&&!s.error&&!s.saving?'Preview memory only':workspaceStatus(s),error:s.error,generation:s.generation,reportingMonth,storageMode:store.mode,storageNotice:externalChange?'Another tab changed the saved workspace. Save or download your drafts, then reload before continuing.':''};}
 let selectedSource='';

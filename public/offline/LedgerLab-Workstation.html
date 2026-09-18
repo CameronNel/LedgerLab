@@ -228,8 +228,12 @@ const transport = async (_url, init) => {
         return Response.json({ error: error.message }, { status: error instanceof local_store_1.LocalStoreError && error.kind === 'conflict' ? 409 : 400 });
     }
 };
-const session = new session_1.WorkspaceSession((url, init) => init?.method === 'POST' && store.mode === 'browser' && navigator.locks
-    ? navigator.locks.request(key, () => transport(url, init)) : transport(url, init));
+const session = new session_1.WorkspaceSession(async (url, init) => {
+    if (init?.method === 'POST' && store.mode === 'browser' && navigator.locks) {
+        return await navigator.locks.request(key, () => transport(url, init));
+    }
+    return await transport(url, init);
+});
 let desktop;
 let reportingMonth = '2025-07', lastActiveMonth = '';
 function model() { const s = session.getSnapshot(), company = (0, career_1.companyForState)(s.state), active = s.state.career?.activeMonth ?? '2025-12'; if (lastActiveMonth !== active) {
