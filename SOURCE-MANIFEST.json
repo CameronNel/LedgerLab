@@ -3,8 +3,8 @@
   "files": [
     {
       "path": ".github/workflows/workspace-ci.yml",
-      "bytes": 2472,
-      "sha256": "dc139d12c1949b2d7fe677de27d16bf9b3f61001e147b8f834f5f75d3de71066"
+      "bytes": 6343,
+      "sha256": "9922158b702e60dbbf40e1260aaae517b438244a150187a780c84b1768043686"
     },
     {
       "path": ".gitignore",
@@ -617,6 +617,11 @@
       "sha256": "8b9ce9c59127811661aaa463da2a5bfb8b3a5037e29834cf6cdae112860fe1b6"
     },
     {
+      "path": "docs/current/transactional-storage.md",
+      "bytes": 2398,
+      "sha256": "782594f45578f340362fa7ea2d4d929850efc3c7a2f1144f16029a47f8130706"
+    },
+    {
       "path": "docs/current/verification.md",
       "bytes": 5488,
       "sha256": "4a3c01749eab36e709b78fd31d942e8daade3c758ebbc35de744e1ab5f0f38dc"
@@ -922,6 +927,11 @@
       "sha256": "17061b18c16d13c619bb0439f48267b04d33be7d5816c024ac3205c6ca5e0cdd"
     },
     {
+      "path": "lib/workspace/transactional-store.ts",
+      "bytes": 8789,
+      "sha256": "842c383bf7b6647e4b9fcf9e95dd200e1ce52a6f1c2e0bcb915da5ea373dbe37"
+    },
+    {
       "path": "next.config.ts",
       "bytes": 133,
       "sha256": "614bce25b089c3f19b1e17a6346c74b858034040154c6621e7d35303004767cc"
@@ -968,8 +978,8 @@
     },
     {
       "path": "public/offline/LedgerLab-Workstation.html",
-      "bytes": 890742,
-      "sha256": "85f33dbf229754c270186bea23b953f1bfad320cae9675fd1e2d0ffc6d2825c3"
+      "bytes": 900633,
+      "sha256": "2cd37de51f8bce4b1b90d263509aa135e5702ddcef7bc1424be092594ccce235"
     },
     {
       "path": "public/offline/LedgerLab-finance-takeover-guide.html",
@@ -1118,8 +1128,8 @@
     },
     {
       "path": "scripts/desktop/check-local-storage.py",
-      "bytes": 7155,
-      "sha256": "ed0ba4818ae9bdec6dbed7088c3a39513c763eb8d1cb6d7affab3af9091baa65"
+      "bytes": 13726,
+      "sha256": "ce815d093f7ea6253a2dd0536f76102146ae502b9453923f694877a415ed5245"
     },
     {
       "path": "scripts/desktop/check-month-review.py",
@@ -1153,8 +1163,8 @@
     },
     {
       "path": "scripts/desktop/preview.ts",
-      "bytes": 7810,
-      "sha256": "36129f5e8292c43638f4e59704e899cf1935ba064025b85d78df729b6b066b38"
+      "bytes": 7628,
+      "sha256": "08f0e2a908cb1462a9a5aaf672afc7470eeebe0512ac8e40ad6a064165f8a68b"
     },
     {
       "path": "scripts/install-ci.sh",
