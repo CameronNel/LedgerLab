@@ -1,0 +1,47 @@
+name: LedgerLab workspace checks
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  standalone:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22.16.0
+      - run: npm install --global typescript@5.8.3 @types/node@22.19.19 --ignore-scripts --no-audit --no-fund
+      - run: node scripts/accounting/run-portable.mjs
+        env:
+          LEDGERLAB_DAY_FIXTURE: /tmp/ledgerlab-daily.json
+          LEDGERLAB_REVIEW_FIXTURE: /tmp/ledgerlab-review.json
+      - run: tsc -p tsconfig.standalone.json && node scripts/desktop/check-source-syntax.mjs
+      - run: node scripts/desktop/bundle.mjs /tmp/LedgerLab-Workstation-v3.1.html
+      - run: python -m pip install playwright==1.55.0
+      - run: python -m playwright install --with-deps chromium
+      - name: Chromium acceptance
+        run: |
+          export CHROMIUM=$(python -c 'from playwright.sync_api import sync_playwright; p=sync_playwright().start(); print(p.chromium.executable_path); p.stop()')
+          python scripts/desktop/check-workspace.py /tmp/LedgerLab-Workstation-v3.1.html /tmp/ledgerlab-daily.json /tmp/workspace-check
+          python scripts/desktop/check-workday.py /tmp/LedgerLab-Workstation-v3.1.html /tmp/ledgerlab-daily.json /tmp/workday-check
+          python scripts/desktop/check-workstation.py /tmp/LedgerLab-Workstation-v3.1.html /tmp/workstation-check
+          python scripts/desktop/check-month-review.py /tmp/LedgerLab-Workstation-v3.1.html /tmp/ledgerlab-review.json /tmp/month-check
+          python scripts/desktop/check-clipboard.py /tmp/LedgerLab-Workstation-v3.1.html /tmp/clipboard-check
+  full-application:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22.16.0
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
