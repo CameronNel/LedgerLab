@@ -1,5 +1,5 @@
 /** Read-only search over the learner's released evidence, never the worked solution. */
-import { WORKSPACE_APPS } from '../workspace/app-registry';
+import { WORKSPACE_APPS, WORKSPACE_UTILITIES } from '../workspace/app-registry';
 import { ACCOUNTS } from '../accounting/accounts';
 import { LESSONS } from '../accounting/lessons';
 import { dayTasks } from '../accounting/workday';
@@ -13,7 +13,7 @@ export type SearchResult = {
     ref: string;
 };
 export function workspaceSearchIndex(model: DesktopModel): SearchResult[] {
-    const results: SearchResult[] = WORKSPACE_APPS.map(app => ({
+    const results: SearchResult[] = [...WORKSPACE_APPS,...WORKSPACE_UTILITIES].map(app => ({
         id: 'app:' + app.id, title: app.name, detail: app.section, keywords: app.keywords, kind: 'app', ref: app.id,
     }));
     for (const file of virtualFiles(model)) {
@@ -41,7 +41,7 @@ export function workspaceSearchIndex(model: DesktopModel): SearchResult[] {
 }
 const normalise = (value: string) => value.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 export function searchWorkspace(index: readonly SearchResult[], query: string, limit = 40): SearchResult[] {
-    const terms = normalise(query.trim()).split(/\s+/).filter(Boolean), cap = Math.min(100, Math.max(0, limit));
+    const terms = normalise(query.trim()).split(/\s+/).filter(Boolean), cap = Number.isFinite(limit) ? Math.min(100, Math.max(0, Math.floor(limit))) : 40;
     if (!terms.length)
         return index.filter(item => item.kind === 'app').slice(0, cap);
     return index.map((item, position) => {

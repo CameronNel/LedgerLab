@@ -2,7 +2,7 @@
 
 Read [README](README.md), [current guide](docs/current/guide.md), [verification](docs/current/verification.md) and [architecture](docs/architecture/README.md) before editing.
 
-Current source release: **3.1.0**. The standalone is `public/offline/LedgerLab-Workstation-v3.1.html`. The hosted application has not been updated. Full dependency-backed type checking subsequently passed on GitHub. Do not claim deployment or a production build based on the standalone tests.
+Current source release: **3.2.0**. The standalone is `public/offline/LedgerLab-Workstation.html`. The hosted application has not been updated. Full dependency-backed type checking subsequently passed on GitHub. Do not claim deployment or a production build based on the standalone tests.
 
 Keep old route IDs, integer-cent postings, independent source evidence, release-date guards, save concurrency, backup compatibility, unsaved drafts and close controls. UI convenience must never auto-post an answer or falsely approve professional judgement.
 

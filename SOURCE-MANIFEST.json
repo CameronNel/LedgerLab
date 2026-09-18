@@ -3,8 +3,8 @@
   "files": [
     {
       "path": ".github/workflows/workspace-ci.yml",
-      "bytes": 2254,
-      "sha256": "af9354888e8b91e066571183dbe9962fb810ff76e9ee3b6626d6771442ef7543"
+      "bytes": 2472,
+      "sha256": "dc139d12c1949b2d7fe677de27d16bf9b3f61001e147b8f834f5f75d3de71066"
     },
     {
       "path": ".gitignore",
@@ -23,23 +23,23 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 1448,
-      "sha256": "8a97016dcbe49d311e0ea9afec9ef3fac4bd8489ee37ea95650d112414b63e48"
+      "bytes": 2879,
+      "sha256": "0aa8b847852783a465f6e67338a763d4bbd1146a44d31c8b8c0ae32de91e65c3"
     },
     {
       "path": "CHATGPT-START-HERE.md",
-      "bytes": 1248,
-      "sha256": "56773c654c327ade6683278d7e5a2f6ee64d323c1807d4f097c8a3bc818fb1bb"
+      "bytes": 1243,
+      "sha256": "f92371014da4dc2fcd535e15628a22dab9c0769cb5f3b3f55a1a0c18fc363e7d"
     },
     {
       "path": "CONTRIBUTING.md",
-      "bytes": 1864,
-      "sha256": "1fc6a5ab6a9b27c566725c6004858e02f2f1fa6b49fb04e2859041f0c8c3d249"
+      "bytes": 1859,
+      "sha256": "f677e59cc1525ab848a217dbb45577aa5854986157d482a8bfef58f1da6e23d6"
     },
     {
       "path": "README.md",
-      "bytes": 4112,
-      "sha256": "e91078e41d5b84095acb83e98ca895384f71c40ae455d053656578f796be7513"
+      "bytes": 5456,
+      "sha256": "c75110838433f4f2d4a9c9208f85539d8fc250fad6aab2b2b5588de883d88704"
     },
     {
       "path": "app/api/workspace/route.ts",
@@ -128,8 +128,8 @@
     },
     {
       "path": "components/ledgerlab/desktop/workspace.css",
-      "bytes": 7212,
-      "sha256": "db0ef497bf238472cfeaa11af97c9b7550ea639a7720132bf6fb0ab87f0e54b0"
+      "bytes": 14363,
+      "sha256": "9de8ecdc39d7369352b54d5cf9cade68bb1ea0844526edeb2f612dcf581480af"
     },
     {
       "path": "components/ledgerlab/dialogs.tsx",
@@ -528,8 +528,8 @@
     },
     {
       "path": "docs/architecture/README.md",
-      "bytes": 3365,
-      "sha256": "778e72fdb28f41c890e1ad62fad04c07977991f88619998a4798918a864a0289"
+      "bytes": 5391,
+      "sha256": "599cbefdf3be1c4635d57260c366f03bfa4bdcd8675cd1cc16db0bf6db444363"
     },
     {
       "path": "docs/archive/2026-09-07/CHATGPT-START-HERE.md",
@@ -613,13 +613,13 @@
     },
     {
       "path": "docs/current/guide.md",
-      "bytes": 4475,
-      "sha256": "5ee3962eee1d3f3cd36915f7cfe0bb1968d2118cc2d1843cd4a3ad6f3a4f4398"
+      "bytes": 8177,
+      "sha256": "8b9ce9c59127811661aaa463da2a5bfb8b3a5037e29834cf6cdae112860fe1b6"
     },
     {
       "path": "docs/current/verification.md",
-      "bytes": 4157,
-      "sha256": "3985aa20d5f2e36a8c69517f4d94d2a3b36959d22acbca50e3c0537198a2a152"
+      "bytes": 5488,
+      "sha256": "4a3c01749eab36e709b78fd31d942e8daade3c758ebbc35de744e1ab5f0f38dc"
     },
     {
       "path": "drizzle.config.ts",
@@ -728,8 +728,8 @@
     },
     {
       "path": "lib/accounting/money.ts",
-      "bytes": 2220,
-      "sha256": "8ec37962196b3cb6c767d416f85afb4ebe14ed34ce08189b3e54d530ce075f84"
+      "bytes": 2421,
+      "sha256": "f43cef4950f67f829d9d7914ababe6fc4efe312bab22bbad8b872d0729701bcd"
     },
     {
       "path": "lib/accounting/month-assessment.ts",
@@ -778,23 +778,28 @@
     },
     {
       "path": "lib/desktop/command-palette.ts",
-      "bytes": 3945,
-      "sha256": "64bb880d356004b39178a60784dbc389d25c7ca5e1f35cf2fc4addd407f207c1"
+      "bytes": 4347,
+      "sha256": "bbca5f6b4f3bf99052650d398ee27a5a7ad7acbe75b99ee29d32d7782608e2b4"
     },
     {
       "path": "lib/desktop/day-desk.ts",
-      "bytes": 25443,
-      "sha256": "5ce14fbb586cae0bf54a3f678626c6c435196ded1802861c277c34c43d949b63"
+      "bytes": 29440,
+      "sha256": "5385730e1ce0f6515215f04b817cc3b6f9daa0f3ed45febe6ecc2a215ada0356"
     },
     {
       "path": "lib/desktop/dialog.ts",
-      "bytes": 1819,
-      "sha256": "626693ca44c41fcd7f678e95db09eadd06c320efbdd867ea990f5b477e1c7c5c"
+      "bytes": 1857,
+      "sha256": "36ab843a417e2c4bf0730ee4f539852fa056f9e612e781628b5c106fe988d7a8"
     },
     {
       "path": "lib/desktop/files.ts",
-      "bytes": 22298,
-      "sha256": "5256bd93f7fe41f3a1b2229c7c1ab455ea0308598719ba08fcce4a550fe442be"
+      "bytes": 22352,
+      "sha256": "782205708fbc704e6e9b7c136878bece009da9da8aa077ff5e0800287c78fbbe"
+    },
+    {
+      "path": "lib/desktop/health-desk.ts",
+      "bytes": 4439,
+      "sha256": "94397858070d1e910c1889e38f8e6509fe7063d08557329301c382541f1a36e7"
     },
     {
       "path": "lib/desktop/icons.ts",
@@ -807,9 +812,19 @@
       "sha256": "581d007cd8015ccb5a6d1a765474ad27be01f41c9b2ecfc2f07b40bbae51a1ba"
     },
     {
+      "path": "lib/desktop/ledger-checks.ts",
+      "bytes": 5423,
+      "sha256": "ac90c917a874cf302a4d806a1fea69e670f5a10170a823dbb0b5c76a05227292"
+    },
+    {
+      "path": "lib/desktop/mail-desk.ts",
+      "bytes": 6445,
+      "sha256": "352a64069bee1e6704edec9abcfbcbd6f2d8c598ee78407f733afa4742ee99df"
+    },
+    {
       "path": "lib/desktop/review-desk.ts",
-      "bytes": 8757,
-      "sha256": "bb6cf53e27a14454867834ff3f705252b6ab5b27c9a586ebfa24a24114208ff0"
+      "bytes": 11342,
+      "sha256": "da44eea41f3b1067821c6ebf69dff3266a5c68993e7fb2d700265e745aeddae8"
     },
     {
       "path": "lib/desktop/review-notes.ts",
@@ -818,13 +833,13 @@
     },
     {
       "path": "lib/desktop/search-index.ts",
-      "bytes": 3277,
-      "sha256": "c786d395cdea679cb63d2b6c489702df57b0381c5dc25c88dde24b15f241fa5e"
+      "bytes": 3368,
+      "sha256": "ce390d337ba569d85c052b8c3b81f280590be803768e7212af62c536d26bb2e0"
     },
     {
       "path": "lib/desktop/shell.ts",
-      "bytes": 59621,
-      "sha256": "c63d091c6cab36a8c665e5d2035ea13261c6c9607def59da3366af02323ec3cb"
+      "bytes": 57998,
+      "sha256": "dc5f1ed163a322bdbc7e2779e2976b34cee3987d9ca86083c04d91005e4d3aa8"
     },
     {
       "path": "lib/desktop/spreadsheet.ts",
@@ -837,9 +852,19 @@
       "sha256": "1490450542aa8f4f6c7e324aa044448f8320f5ecef708dc93ba2cfe63aa2dfca"
     },
     {
+      "path": "lib/desktop/task-queue.ts",
+      "bytes": 4087,
+      "sha256": "177cfc47b2e746977b45bc1b636e09757e98b2bf3baf034e7f6e425f1c4efcf3"
+    },
+    {
       "path": "lib/desktop/types.ts",
       "bytes": 8276,
       "sha256": "c037f5989789f1e226bcc8a1405adb7bb5b46746b7bd674d35445750295c8c8a"
+    },
+    {
+      "path": "lib/desktop/view-state.ts",
+      "bytes": 2322,
+      "sha256": "f3445e774cf101b82de057a880a4dacdb733a0034bb0d46cd80e36badfdaa1f8"
     },
     {
       "path": "lib/desktop/workbook-io.ts",
@@ -863,8 +888,8 @@
     },
     {
       "path": "lib/desktop/workspace-menu.ts",
-      "bytes": 1029,
-      "sha256": "eaefd7552833ef4b2315a40659028ebf577d6d78a718cb47a519a86faa8bdb5d"
+      "bytes": 1204,
+      "sha256": "dc5ee198b35cdee693bfc6e70865dc3d13824539123a597c3e5223c3fb7286f9"
     },
     {
       "path": "lib/utils.ts",
@@ -873,8 +898,13 @@
     },
     {
       "path": "lib/workspace/app-registry.ts",
-      "bytes": 4415,
-      "sha256": "26234aeff4f223cc23dc0203db785092f0b06ca6a984245d81651c3d02083f1b"
+      "bytes": 4835,
+      "sha256": "fcefeaf3e01176d90696d1f234d3c77f3f295005f4d3f6b223ef8e703ba41cc8"
+    },
+    {
+      "path": "lib/workspace/local-store.ts",
+      "bytes": 3945,
+      "sha256": "d02ab0346f7388eed7bf3da7f7d5697b61ba4548eead85288dc2973fbda27a03"
     },
     {
       "path": "lib/workspace/notebook-draft.ts",
@@ -899,12 +929,12 @@
     {
       "path": "package-lock.json",
       "bytes": 498258,
-      "sha256": "43b9321ce3a07197cdb100a1035753b72c2414720c382486d3e60d05a7fb0d13"
+      "sha256": "e9fa3524ab7c822170b125d84717d5aed7278618fa2e92a8924a41a53fe9bd88"
     },
     {
       "path": "package.json",
-      "bytes": 2949,
-      "sha256": "1543ac27874b69d5668607e00f2af678e6ca94ac5578949b43ebaec7d5cd4d63"
+      "bytes": 3108,
+      "sha256": "b694d0507add46a99f5a1d951d10bc79ae65cadf6be7e9c5c4a04e3ecbca0fe2"
     },
     {
       "path": "postcss.config.mjs",
@@ -937,9 +967,9 @@
       "sha256": "20e72ef86749d5f7e7f39d61be468f6a11442964c1fcc964910ce4b6f9214b3e"
     },
     {
-      "path": "public/offline/LedgerLab-Workstation-v3.1.html",
-      "bytes": 844221,
-      "sha256": "fa0a7fd060550cdb4394ee5e4e3d5d31276238fd536bba95207f901622e8be85"
+      "path": "public/offline/LedgerLab-Workstation.html",
+      "bytes": 890683,
+      "sha256": "64d5c031c51e70c7f9324bba3109441fb6bb188bd7129d38ebaebd096746c2ac"
     },
     {
       "path": "public/offline/LedgerLab-finance-takeover-guide.html",
@@ -960,6 +990,11 @@
       "path": "scripts/accounting/check.ts",
       "bytes": 3095,
       "sha256": "ec77d5d622da783f407a2055c3d61fc37a3639ae9fe3d27ced389c5eb053cc45"
+    },
+    {
+      "path": "scripts/accounting/clarity-check.ts",
+      "bytes": 11054,
+      "sha256": "fce13e28265ffff530d713e31e81b7d9da4c324e263815572f6fbc54c8675320"
     },
     {
       "path": "scripts/accounting/desktop-check.ts",
@@ -1008,13 +1043,13 @@
     },
     {
       "path": "scripts/accounting/run-portable.mjs",
-      "bytes": 3165,
-      "sha256": "34af8985669e0b9ac42e1ae766130aae6822b5758bc47a153d5aaf2535fdd993"
+      "bytes": 3194,
+      "sha256": "1cbc19fef8bb311d9ca41e7cebb7b0fbfb4735c9f0db07417522ed74171f4513"
     },
     {
       "path": "scripts/accounting/run.mjs",
-      "bytes": 1324,
-      "sha256": "e6f98f0a86d8caec810d69a16f464cc120745142cb5ee1dfc73594697b1495bd"
+      "bytes": 1380,
+      "sha256": "7e6f3d148af8f9ba9eb56d0354651e45dd28774c8427c05006c274cc208d004a"
     },
     {
       "path": "scripts/accounting/workbook-check.ts",
@@ -1063,8 +1098,8 @@
     },
     {
       "path": "scripts/desktop/bundle.mjs",
-      "bytes": 3291,
-      "sha256": "d11e907e0adc8da6e2f758ba0fb8f4aa46d9ef9dd8f7c8fca6e78bc9b3fa412b"
+      "bytes": 3267,
+      "sha256": "528bf56cba3c7909ae20537eb330810c61bdb48c496e88821b6aca45225b3763"
     },
     {
       "path": "scripts/desktop/check-browser.py",
@@ -1072,9 +1107,19 @@
       "sha256": "205db0a9ff0a1d1df1800aa9e4f663493dcbf52c97ee84b416ca0ed26c333591"
     },
     {
+      "path": "scripts/desktop/check-clarity.py",
+      "bytes": 10838,
+      "sha256": "8c40e67fe6a2fc4d5aa2056e791f06d75b72c058166213669b811df8033fb88c"
+    },
+    {
       "path": "scripts/desktop/check-clipboard.py",
       "bytes": 3745,
       "sha256": "2d1c661dcf3e22a175e5b8a20bcfc3d36783423453a564feb9999418f6cdd324"
+    },
+    {
+      "path": "scripts/desktop/check-local-storage.py",
+      "bytes": 7144,
+      "sha256": "adef339eb90be1a98310d6dc26c7515e0cc17993abcbe432ef99da781ced2211"
     },
     {
       "path": "scripts/desktop/check-month-review.py",
@@ -1093,8 +1138,8 @@
     },
     {
       "path": "scripts/desktop/check-workspace.py",
-      "bytes": 10007,
-      "sha256": "08cab289223cd88dd7e5cfc726dfa4a5af87478d2f42415f364b293a7aeb5c5a"
+      "bytes": 10015,
+      "sha256": "1d776cccd81169d1c4620f7fdc7e6e3e3bfe5b48c909865acbd1fac101132154"
     },
     {
       "path": "scripts/desktop/check-workstation.py",
@@ -1108,8 +1153,8 @@
     },
     {
       "path": "scripts/desktop/preview.ts",
-      "bytes": 4894,
-      "sha256": "b73128c85f2492c7448319a9243fbe4ffbbb9cbe456dc708221558858cc5dba4"
+      "bytes": 7759,
+      "sha256": "25c64b433a9d72473ca2976eda24238dedfd4904764caaa668568789eebbdf9e"
     },
     {
       "path": "scripts/install-ci.sh",

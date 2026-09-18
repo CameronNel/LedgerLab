@@ -1,5 +1,7 @@
+import {mountHealthDesk} from './health-desk';
+import {mountMailDesk,type MailDeskHandle} from './mail-desk';
 import {icon} from './icons';
-import {WORKSPACE_SECTIONS,WORKSTATION_VERSION,type WorkspaceSection} from '../workspace/app-registry';
+import {WORKSPACE_SECTIONS,WORKSTATION_VERSION,appById,type WorkspaceSection} from '../workspace/app-registry';
 import {workspaceMenuHTML} from './workspace-menu';
 import {workspaceSearchIndex,type SearchResult} from './search-index';
 import {openCommandPalette} from './command-palette';
@@ -37,7 +39,7 @@ export type DesktopHandle = {
 };
 type EditorState={draft:DesktopUserFile;base:string|null;dirty:boolean;pending:boolean;orphan:boolean;active:[number,number]};
 type WindowRecord={id:string;title:string;icon:string;el:HTMLElement;body:HTMLElement;x:number;y:number;width:number;height:number;max:boolean;min:boolean;kind:string;
-  daily?:DayDeskHandle;review?:ReviewDeskHandle;refresh?:()=>void;editor?:EditorState;sheet?:SpreadsheetHandle;closing?:boolean;save?:()=>Promise<void>;dispose?:()=>void;view?:string;path?:string;browse?:(path:string)=>void};
+  mail?:MailDeskHandle;daily?:DayDeskHandle;review?:ReviewDeskHandle;refresh?:()=>void;editor?:EditorState;sheet?:SpreadsheetHandle;closing?:boolean;save?:()=>Promise<void>;dispose?:()=>void;view?:string;path?:string;browse?:(path:string)=>void};
 const button=(action:string,label:string,symbol='',extra='')=>`<button type="button" data-action="${action}" ${extra}>${symbol?icon(symbol):''}<span>${e(label)}</span></button>`;
 const fileIcon=(file:VirtualFile)=>file.kind==='workbook'||file.kind==='csv'||file.kind==='template'?'sheet':file.kind==='mail'?'mail':file.kind==='note'?'note':'file';
 export function mountFinanceDesktop(host:HTMLElement,initial:DesktopModel,callbacks:DesktopCallbacks):DesktopHandle {
@@ -53,7 +55,7 @@ class FinanceDesktop implements DesktopHandle {
   private dead=false;private observer:ResizeObserver;private toastTimer:ReturnType<typeof setTimeout>|undefined;
   constructor(private host:HTMLElement,model:DesktopModel,private callbacks:DesktopCallbacks){
     this.model=model;this.refreshIndex();host.classList.add('finance-pc');
-    host.innerHTML=`<nav class="pc-navigation" aria-label="Workspace sections"><strong>LedgerLab <small>v${WORKSTATION_VERSION}</small></strong>${WORKSPACE_SECTIONS.map(s=>`<button type="button" data-section="${s.id}">${e(s.name)}</button>`).join('')}<button type="button" data-action="global-search" class="pc-global-search" aria-label="Search LedgerLab (Control or Command K)">Search <kbd>Ctrl K</kbd></button></nav><div class="pc-stage"><div class="pc-wallpaper" aria-hidden="true"><div class="pc-orbit one"></div><div class="pc-orbit two"></div></div>
+    host.innerHTML=`<nav class="pc-navigation" aria-label="Workspace sections"><strong>LedgerLab <small>v${WORKSTATION_VERSION}</small></strong>${WORKSPACE_SECTIONS.map(s=>`<button type="button" data-section="${s.id}">${e(s.name)}</button>`).join('')}<button type="button" data-action="global-search" class="pc-global-search" aria-label="Search LedgerLab (Control or Command K)">Search <kbd>Ctrl K</kbd></button></nav><div class="pc-storage-banner" role="status" hidden></div><div class="pc-stage"><div class="pc-wallpaper" aria-hidden="true"><div class="pc-orbit one"></div><div class="pc-orbit two"></div></div>
       <div class="pc-desktop-heading"><span class="pc-eyebrow">HARBOUR & CO.</span><h1>Your finance workstation.</h1><p>A new role. The same company files. Your month to own.</p></div>
       <nav class="pc-shortcuts" aria-label="Desktop shortcuts"></nav>
       <aside class="pc-welcome"><span class="pc-eyebrow">YOUR DESK</span><h2></h2><p></p><div>${button('current','Open current month','folder')}${button('career','Open Today','app')}</div><small>Fictional training workspace · AUD 2025</small></aside>
@@ -61,7 +63,7 @@ class FinanceDesktop implements DesktopHandle {
       <nav class="pc-taskbar" aria-label="Taskbar"></nav><section class="pc-start" aria-label="Start menu" hidden></section>
       <div class="pc-toast" role="status" aria-live="polite" hidden></div>`;
     this.stage=host.querySelector('.pc-stage')!;this.taskbar=host.querySelector('.pc-taskbar')!;this.menu=host.querySelector('.pc-start')!;this.toast=host.querySelector('.pc-toast')!;
-    host.addEventListener('click',this.globalClick);host.addEventListener('keydown',this.globalKey);
+    host.addEventListener('keydown',this.backupKey,true);host.addEventListener('click',this.globalClick);host.addEventListener('keydown',this.globalKey);
     window.addEventListener('beforeunload',this.beforeUnload);
     this.observer=new ResizeObserver(()=>{for(const w of this.windows.values())this.place(w);});this.observer.observe(this.stage);
     this.paintDesktop();this.openWorkbench();
@@ -92,14 +94,21 @@ class FinanceDesktop implements DesktopHandle {
     welcome.querySelector('p')!.textContent=this.model.state.career?`${this.model.state.career.role==='financial-manager'?'Financial manager':'Financial accountant'} · ${this.model.state.career.scenario} handover. Released evidence only.`:'Open Finance desk to choose your takeover month, role and handover. Your existing practice work is preserved.';
     const error=this.host.querySelector<HTMLElement>('.pc-save-error')!;error.hidden=!this.model.error;
     error.innerHTML=this.model.error?`<strong>Saved workspace needs attention</strong><p>${e(this.model.error)}</p>${button('reload','Reload saved work','refresh')}`:'';
+    const storage=this.host.querySelector<HTMLElement>('.pc-storage-banner')!;
+    const warning=this.model.storageNotice||(this.model.storageMode==='memory'?'Memory-only session: closing this tab loses work. Export a backup to keep your saved entries.':'');
+    storage.hidden=!warning;storage.innerHTML=warning?`<span>${e(warning)}</span>${button('backup-now','Backup saved work','download')}`:'';
+    this.host.classList.toggle('pc-has-storage-warning',!!warning);
     this.paintTaskbar();
   }
   private paintTaskbar(){
+    const active=this.windows.get(this.active);
+    const section=active?.view?appById(active.view)?.section:active?.daily?'today':active?.kind==='reviews'||active?.kind==='health'?'close':active?.kind==='mail'?'today':active?.kind==='explorer'||active?.kind==='viewer'||active?.kind==='editor'?'files':undefined;
+    this.host.querySelectorAll<HTMLElement>('[data-section]').forEach(el=>{if(el.dataset.section===section)el.setAttribute('aria-current','page');else el.removeAttribute('aria-current');});
     this.taskbar.innerHTML=`<button type="button" class="pc-start-button" data-action="start" aria-label="Open Start menu" aria-expanded="${!this.menu.hidden}"><b>LL</b></button>
       <button type="button" data-action="drive" aria-label="Open Finance drive">${icon('folder')}</button><button type="button" data-action="mail" aria-label="Open scenario mail">${icon('mail')}</button><span class="pc-taskbar-divider"></span>
       <div class="pc-task-items">${[...this.windows.values()].map(w=>`<div class="pc-task-item" data-active="${this.active===w.id&&!w.min}"><button type="button" data-task="${e(w.id)}" data-active="${this.active===w.id&&!w.min}" aria-pressed="${this.active===w.id&&!w.min}" title="${e(w.title)}${w.min?' (minimized)':''}">${icon(w.icon)}<span>${e(w.title)}</span>${w.editor?.dirty?'<i aria-label="Unsaved draft"></i>':''}</button><button type="button" class="pc-task-close" data-close-task="${e(w.id)}" aria-label="Close tab ${e(w.title)}" title="Close ${e(w.title)}">×</button></div>`).join('')}</div>
       <button type="button" class="pc-tile-button" data-action="tile" title="Arrange windows side by side" aria-label="Arrange windows side by side">${icon('tile')}</button>
-      <button type="button" class="pc-sync" data-action="reload" title="${e(this.model.error||this.model.saveStatus)}" data-error="${!!this.model.error}">${icon(this.model.error?'refresh':this.model.saving?'refresh':'check')}<span role="status">${e(this.model.error?'Save needs attention':this.model.saveStatus)}</span></button>
+      <button type="button" class="pc-sync" data-action="reload" title="${e(this.model.error||this.model.saveStatus)}" data-error="${!!this.model.error}">${icon(this.model.error?'refresh':this.model.saving?'refresh':this.model.storageMode==='memory'?'download':'check')}<span role="status">${e(this.model.error?'Save needs attention':this.model.saveStatus)}</span></button>
       ${this.model.state.workday?`<button type="button" class="pc-period day-pc-clock" data-action="clock" aria-label="Change simulated PC date"><strong>${e(this.model.state.workday.today)}</strong><small>PC date · Change</small></button>`:`<div class="pc-period"><strong>${e(currentMonth(this.model))}</strong><small>Simulation period</small></div>`}<button type="button" class="pc-show-desktop" data-action="show-desktop" aria-label="Show desktop" title="Show desktop"></button>`;
   }
   private openStart(section?:WorkspaceSection){
@@ -121,6 +130,15 @@ class FinanceDesktop implements DesktopHandle {
     w.refresh=()=>{w.body.innerHTML=inspectionHTML(item,this.model);};
     if(!w.body.dataset.inspectionEvents){w.body.dataset.inspectionEvents='true';w.body.addEventListener('click',event=>{const source=(event.target as Element).closest<HTMLElement>('[data-inspect-source]');if(source)this.openDocument(source.dataset.inspectSource!);});}
     w.refresh();this.focus(w);
+  }
+  private backup(){
+    downloadFile(`LedgerLab-backup-${currentMonth(this.model)}.json`,JSON.stringify({format:'LedgerLab backup',version:1,state:this.model.state},null,2),'application/json');
+    this.notify(this.hasUnsaved()?'Backup contains saved work only. Save or separately download your open drafts.':'Backup export requested. Check that your browser retained the file.');
+  }
+  private openHealth(){
+    const id='ledger-checks';if(!this.windows.has(id)&&!this.roomForWindow())return;
+    const w=this.windows.get(id)??this.createWindow(id,'Ledger checks · actual saved work','check','health',1000,700);
+    if(!w.refresh){const panel=mountHealthDesk(w.body,()=>this.model,(kind,ref)=>this.activateSearch({kind,ref,id:kind+':'+ref,title:ref,detail:'Read-only inspection',keywords:''}),view=>this.openApp(view));w.refresh=panel.refresh;}else w.refresh();this.focus(w);
   }
   private openReviews(){
     const id='review-notes';if(!this.windows.has(id)&&!this.roomForWindow())return;
@@ -148,10 +166,13 @@ class FinanceDesktop implements DesktopHandle {
     if(action!=='start'&&!target.closest('.pc-start'))this.menu.hidden=true;
     switch(action){case 'start':this.openStart();break;case 'drive':this.openExplorer('');break;case 'current':this.openExplorer(`Finance/${currentMonth(this.model)}`);break;
       case 'handover':this.openExplorer('Handover');break;case 'work':this.openExplorer(`Working papers/${currentMonth(this.model)}`);break;case 'mail':this.openMail();break;case 'trash':this.openExplorer('Recycle bin');break;
-      case 'global-search':this.search();break;case 'review-notes':this.openReviews();break;case 'clock':this.openDaily(undefined,true);break;case 'career':this.openWorkbench();break;case 'new-note':this.newNote();break;case 'tile':this.tile();break;
+      case 'backup-now':this.backup();break;case 'ledger-checks':this.openHealth();break;case 'global-search':this.search();break;case 'review-notes':this.openReviews();break;case 'clock':this.openDaily(undefined,true);break;case 'career':this.openWorkbench();break;case 'new-note':this.newNote();break;case 'tile':this.tile();break;
       case 'show-desktop':{const open=[...this.windows.values()].filter(w=>!w.min);if(open.length)open.forEach(w=>this.minimize(w));else for(const w of this.windows.values())this.focus(w);break;}
       case 'classic':if(this.canLeave())this.callbacks.classic();break;case 'reload':this.callbacks.reload();break;
     }
+  };
+  private backupKey=(event:KeyboardEvent)=>{
+    if((event.ctrlKey||event.metaKey)&&event.shiftKey&&event.key.toLowerCase()==='s'&&!this.host.querySelector('dialog[open]')){event.preventDefault();event.stopPropagation();this.backup();}
   };
   private globalKey=(event:KeyboardEvent)=>{
     if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='k'){event.preventDefault();this.search();return;}
@@ -320,6 +341,7 @@ class FinanceDesktop implements DesktopHandle {
     });paint();
   }
   openApp=(view:string,focusTask?:string)=>{
+    if(view==='ledger-checks'){this.openHealth();return;}
     if(view==='review-notes'){this.openReviews();return;}
     if(view==='daily'){this.openDaily();return;}
     if(!FINANCE_APPS.some(a=>a.id===view))view='career';
@@ -387,31 +409,11 @@ class FinanceDesktop implements DesktopHandle {
     });paint();
   }
   openMail(selected?:string){
-    const existing=this.windows.get('mail');if(existing){if(selected)existing.path=selected;existing.refresh?.();this.focus(existing);return;}
-    if(!this.roomForWindow())return;
-    const w=this.createWindow('mail','Harbour Mail','mail','mail',1080,670);w.path=selected;let query='',unreadOnly=false;
-    const paint=()=>{
-      const inputFocused=w.body.contains(document.activeElement)&&document.activeElement?.getAttribute('aria-label')==='Search scenario emails';const caret=inputFocused?(document.activeElement as HTMLInputElement).selectionStart:null;
-      const all=scenarioMail(this.model),read=new Set(this.model.state.desktop?.readMail??[]),found=all.filter(m=>(!unreadOnly||!read.has(m.id))&&`${m.subject} ${m.from}`.toLowerCase().includes(query.toLowerCase()));
-      let chosen=found.find(m=>m.id===w.path);if(!chosen)chosen=found[0];if(chosen)w.path=chosen.id;
-      w.body.innerHTML=`<div class="pc-mail-toolbar"><div><strong>Harbour Mail</strong><small>Scenario inbox · ${all.filter(m=>!read.has(m.id)).length} unread</small></div><label class="pc-search">${icon('search')}<input aria-label="Search scenario emails" placeholder="Search inbox" value="${e(query)}" maxlength="120"></label><label class="pc-unread-filter"><input type="checkbox" aria-label="Unread emails only" ${unreadOnly?'checked':''}> Unread</label></div>
-        <div class="pc-mail-layout"><nav class="pc-message-list" aria-label="Scenario messages">${found.map(m=>`<button type="button" data-mail="${e(m.id)}" data-active="${chosen?.id===m.id}" data-unread="${!read.has(m.id)}"><span><strong>${e(m.from)}</strong><time>${m.date}</time></span><h3>${e(m.subject)}</h3><p>${e(m.body[0].slice(0,110))}</p><small>${e(m.category??'Inbox')}${m.due?` · Due ${e(m.due)}`:''} · ${m.attachments.length} attachments</small></button>`).join('')||'<p class="pc-padding">No messages match this filter.</p>'}</nav>
-        <article class="pc-message">${chosen?`<div class="pc-message-actions">${button('read',read.has(chosen.id)?'Mark unread':'Mark read','mail',this.model.saving?'disabled':'')}${button('export','Download email','download')}${chosen.view?button('app',chosen.taskId?'Open assignment':'Open task workspace','app'):''}</div><header><span class="pc-eyebrow">SCENARIO EMAIL</span><h2>${e(chosen.subject)}</h2><p><strong>${e(chosen.from)}</strong> to Finance team</p><time>${chosen.date}</time>${chosen.due?`<p><b>${e(chosen.priority??'Normal')} priority · Due ${e(chosen.due)} end of day</b></p>`:''}</header><div class="pc-message-text">${chosen.body.map(p=>`<p>${e(p)}</p>`).join('')}</div><section class="pc-attachments"><h3>Attachments · ${chosen.attachments.length}</h3>${chosen.attachments.map(id=>{const d=sourceDocuments(this.model).find(d=>d.id===id);return `<button type="button" data-source="${e(id)}">${icon(d?.kind==='Bank statement'?'bank':'file')}<span><strong>${e(id)}</strong><small>${e(d?.title??'Source document')}</small></span>${icon('forward')}</button>`;}).join('')}</section><footer>Fictional case correspondence. No real inbox connection and no messages are sent.</footer>`:'<p class="pc-padding">No messages available yet.</p>'}</article></div>`;
-      if(inputFocused){const input=w.body.querySelector<HTMLInputElement>('[aria-label="Search scenario emails"]')!;input.focus();input.setSelectionRange(caret,caret);}
-    };
-    w.refresh=paint;
-    w.body.addEventListener('input',event=>{if((event.target as HTMLElement).getAttribute('aria-label')==='Search scenario emails'){query=(event.target as HTMLInputElement).value;paint();}});
-    w.body.addEventListener('change',event=>{if((event.target as HTMLElement).getAttribute('aria-label')==='Unread emails only'){unreadOnly=(event.target as HTMLInputElement).checked;paint();}});
-    w.body.addEventListener('click',event=>{
-      const target=event.target as Element,mail=target.closest<HTMLElement>('[data-mail]'),source=target.closest<HTMLElement>('[data-source]');
-      if(mail){w.path=mail.dataset.mail;paint();return;}if(source){this.openDocument(source.dataset.source!);return;}
-      const chosen=scenarioMail(this.model).find(m=>m.id===w.path);if(!chosen)return;
-      switch(target.closest<HTMLElement>('[data-action]')?.dataset.action){
-        case 'read':void this.callbacks.send({type:'markDesktopMailRead',mailId:chosen.id,read:!this.model.state.desktop?.readMail.includes(chosen.id)});break;
-        case 'app':if(chosen.taskId)this.openDaily(chosen.taskId);else if(chosen.view)this.openApp(chosen.view);break;
-        case 'export':{const f=this.files.find(f=>f.kind==='mail'&&f.ref===chosen.id);if(f){const p=filePayload(f,this.model);downloadFile(p.name,p.content,p.mime);}break;}
-      }
-    });paint();
+    if(!this.windows.has('mail')&&!this.roomForWindow())return;
+    const w=this.windows.get('mail')??this.createWindow('mail','Harbour Mail','mail','mail',1080,670);
+    if(!w.mail){w.mail=mountMailDesk(w.body,{model:()=>this.model,send:this.callbacks.send,source:id=>this.openDocument(id),assignment:id=>this.openDaily(id),app:view=>this.openApp(view)},selected);w.refresh=w.mail.refresh;}
+    else if(selected)w.mail.select(selected);else w.mail.refresh();
+    this.focus(w);
   }
   newWorkbook(template='blank'){
     const file=createWorkingFile(this.model,template);file.name=uniqueFileName(file.name,file.folder,this.model);this.openEditor(file,true);
@@ -506,7 +508,7 @@ class FinanceDesktop implements DesktopHandle {
   canLeave=()=>!this.hasUnsaved()||window.confirm('There are unsaved response, accounting or working-file drafts. Leave this desktop and discard them? Save or download them first to keep your work.');
   private beforeUnload=(event:BeforeUnloadEvent)=>{if(this.hasUnsaved()){event.preventDefault();event.returnValue='';}};
   destroy=()=>{
-    this.dead=true;this.closeSearch?.();clearTimeout(this.toastTimer);this.observer.disconnect();window.removeEventListener('beforeunload',this.beforeUnload);this.host.removeEventListener('click',this.globalClick);this.host.removeEventListener('keydown',this.globalKey);
+    this.dead=true;this.closeSearch?.();clearTimeout(this.toastTimer);this.observer.disconnect();window.removeEventListener('beforeunload',this.beforeUnload);this.host.removeEventListener('keydown',this.backupKey,true);this.host.removeEventListener('click',this.globalClick);this.host.removeEventListener('keydown',this.globalKey);
     for(const w of this.windows.values())w.dispose?.();this.windows.clear();this.host.innerHTML='';this.host.classList.remove('finance-pc');
   };
 }

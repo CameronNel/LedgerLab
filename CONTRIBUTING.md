@@ -18,6 +18,6 @@ New optional state must preserve old backups. Use existing validated commands an
 
 ## Release
 
-Rebuild `public/offline/LedgerLab-Workstation-v3.1.html` after imported source or CSS changes. Run `python scripts/accounting/package-source.py` to build a source ZIP with an explicit inventory. Keep verification claims dated and name the exact commands actually executed.
+Rebuild `public/offline/LedgerLab-Workstation.html` after imported source or CSS changes. Run `python scripts/accounting/package-source.py` to build a source ZIP with an explicit inventory. Keep verification claims dated and name the exact commands actually executed.
 
 Changes to the repository do not deploy the hosted app. Publishing must preserve its current identity, data binding and private audience, and requires separate verified deployment steps.

@@ -89,7 +89,7 @@ with sync_playwright() as p:
     w.locator('[data-review-task]').nth(1).click()
     ck('Save or discard' in w.locator('[role=alert]').inner_text(),'Switching tasks cannot lose a draft')
     page.locator('[data-close-task="review-notes"]').click()
-    dialog=page.locator('.pc-modal[role=dialog]').last
+    dialog=page.locator('dialog.pc-modal-backdrop[open]').last
     ck(dialog.is_visible(),'Closing a dirty review asks for a decision')
     dialog.get_by_role('button',name='Cancel',exact=True).click()
     ck(w.get_by_label('Preparer response',exact=True).input_value().endswith('Follow-up recorded.'),'Cancel retains the draft')

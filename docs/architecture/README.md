@@ -2,7 +2,7 @@
 
 ## Boundaries
 
-The financial engine and source generator remain unchanged. `WorkspaceSession` sends validated commands to either the production API or the standalone's local adapter. The desktop consumes the date-projected company and actual learner journals. React mounts the existing accounting views through its existing portal bridge.
+Posting rules and the source generator are unchanged. The shared money-input parser now rejects malformed thousands grouping; valid amounts retain the same integer-cent representation. `WorkspaceSession` sends validated commands to either the production API or the standalone's local adapter. The desktop consumes the date-projected company and actual learner journals. React mounts the existing accounting views through its existing portal bridge.
 
 | Module | Responsibility |
 |---|---|
@@ -15,6 +15,13 @@ The financial engine and source generator remain unchanged. `WorkspaceSession` s
 | `lib/desktop/review-notes.ts` | Validated review-file model, state fingerprint, stages and save commands. |
 | `lib/desktop/review-desk.ts` | Review editor, response history, concurrency and draft recovery. |
 | `lib/desktop/icons.ts` | Extracted existing desktop icon rendering. |
+| `lib/desktop/task-queue.ts` | Pure task prioritisation, follow-up classification, search and bounded pagination. |
+| `lib/desktop/ledger-checks.ts` | Actual-ledger diagnostics using only released source data; no worked-answer access. |
+| `lib/desktop/health-desk.ts` | Read-only diagnostics UI, inspection links, severity filter and CSV export. |
+| `lib/desktop/mail-desk.ts` | Incoming/Sent/Drafts folder state, unread handling and explicit message selection. |
+| `lib/desktop/view-state.ts` | Restore focus/caret, disclosure state and scrolling after controlled DOM refresh. |
+| `lib/desktop/dialog.ts` | Native top-layer modal close decisions, keyboard containment and focus return. |
+| `lib/workspace/local-store.ts` | Validated offline envelopes, explicit memory fallback, storage failure and recovery boundary. |
 | `lib/desktop/shell.ts` | Existing window manager and integration of the focused modules. |
 | `components/ledgerlab/desktop/workspace.css` | Additive navigation/search/review styles; old accounting CSS preserved. |
 
@@ -35,3 +42,11 @@ All 19 route IDs and 18 accounting app entries remain. Existing financial rules,
 The large window-manager, explorer and spreadsheet implementations have not been rewritten or exhaustively split. This release extracts focused new responsibilities and the icon catalogue, rather than risking a broad rewrite alongside UX changes.
 
 Detailed historical accounting invariants and hosting identity are in the [archived engineering handoff](../archive/2026-09-07/HANDOFF.md). Never assume its old deployment/test claims describe the current branch.
+
+## Offline persistence
+
+The storage key is unchanged for old backups and same-origin progress. The adapter validates envelopes and the existing backup schema. A persistent write is acknowledged only after `setItem` succeeds. A corrupt existing save is not a blank case. Recovery downloads the original text and requires a separately validated backup plus the literal replacement confirmation, or an explicitly chosen new case.
+
+Browser POST operations use the Web Locks API when available, then check revisions inside the lock. On browsers/origins without Web Locks, only the existing revision check is available; atomic cross-tab exclusion is not claimed there. Storage events warn rather than silently replacing local drafts. Browser storage and profile retention are still outside application control; export backups regularly.
+
+The hosted owner-scoped API and database schema are not changed. The offline app is not a multi-user server or a tamper-proof examination platform. Search/checks respect normal released evidence, but source/test code can reveal case expectations.

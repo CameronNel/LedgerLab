@@ -9,7 +9,7 @@ import {monthEnd} from '../accounting/money';
 import {workbookXLSX} from './worksheet';
 import {WORKPAPER_TEMPLATES,enrichWorkingFile} from './workpaper-templates';
 import {newDesktopId,type DesktopUserFile} from './types';
-export type DesktopModel = {company:PracticeCompany;state:PracticeState;journals:Journal[];displayName:string;saving:boolean;saveStatus:string;error:string;generation:number;reportingMonth?:string};
+export type DesktopModel = {company:PracticeCompany;state:PracticeState;journals:Journal[];displayName:string;saving:boolean;saveStatus:string;error:string;generation:number;reportingMonth?:string;storageMode?:'browser'|'memory';storageNotice?:string};
 export type VirtualFile = {id:string;name:string;folder:string;kind:'document'|'mail'|'report'|'csv'|'note'|'workbook'|'template';date:string;description:string;ref:string;view?:string;taskId?:string;priority?:string;due?:string;category?:string};
 export type ScenarioMail = {id:string;date:string;from:string;subject:string;body:string[];attachments:string[];view?:string;taskId?:string;priority?:string;due?:string;category?:string};
 export type FilePayload = {name:string;content:string|Uint8Array;mime:string};

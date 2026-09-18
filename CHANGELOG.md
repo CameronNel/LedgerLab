@@ -1,5 +1,18 @@
 # Changelog
 
+## 3.2.0 · 18 September 2026
+
+- Compact Today, meaningful processing titles, available-work category counts, search/status/work-area filters, 20-row pagination and urgent/follow-up prioritisation. Future evidence remains unreleased.
+- Read-only actual-ledger diagnostics and CSV export; duplicate/reversal/source/account/contact/bank/suspense safeguards. No automatic correction or approval.
+- Exact money-input validation: reject malformed grouping rather than silently changing amounts.
+- Local storage validation, quota-safe acknowledgements, raw-data recovery, deliberate restore, Web Locks around browser writes and visible memory/cross-tab notices.
+- Native top-layer close dialogs, input focus/caret/scroll retention, and draft invalidation on same-case restoration. End-of-day notes are protected as unsaved work.
+- Mail controller extracted; Inbox/Sent/Drafts folders and correct incoming unread counts. Explicit message links clear stale filters.
+- Review filters/pagination/history export; utility registry shared with search; accessible combobox result announcements; saved-work backup shortcut.
+- Package release version synchronised. One stable current HTML path, without accumulating another obsolete bundle. Earlier 3.1 remains in Git history.
+- New domain and browser regression suites and actual-origin persistence/restart/concurrency CI coverage. See current verification for executed status and limitations.
+
+
 ## 3.1.0 · 18 September 2026
 
 - Centralized all existing app IDs and names in one seven-section registry.

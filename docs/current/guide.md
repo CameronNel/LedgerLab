@@ -1,10 +1,18 @@
-# LedgerLab 3.1: your daily workspace
+# LedgerLab 3.2: your daily workspace
 
 ## First run
 
 Open the current standalone HTML. A fresh case begins on 1 July 2025 with the financial-manager role and a messy handover. Today is the first open window. Read the onboarding email, open its assignment and inspect the supplied evidence.
 
 The seven permanent sections organize the existing tools. Today is the home screen; the desktop is the environment, not another competing finance desk. The classic sidebar uses the same registry and retains old bookmark IDs.
+
+## A smaller daily queue
+
+Today shows one recommended action and a short next queue before general guidance. Critical control tasks and due follow-ups take priority. A future follow-up is not treated as something to do now, and Waiting is never shown as completed.
+
+Choose **My tasks** to search references, source titles, people or task descriptions. Combine status and work-area filters. Only arrived work is included. The list shows 20 tasks per page and reports the exact matching count; Reset filters restores an understandable starting point. Expand the routine or tool guide only when needed.
+
+Amounts use a dot for decimals. `1234.56` and `1,234.56` both mean the same amount; `1,2` is rejected because treating that input as 12 would be unsafe. A rejected amount stays on screen for correction. Draft saves and task submission remain separate.
 
 ## Search instead of hunting through modules
 
@@ -29,6 +37,28 @@ Cleared is allowed only when the underlying task already passes. Changing suppor
 Review notes are saved in `Working papers/<month>/Review notes` as a structured text file. They are included in ordinary backups. Do not edit that JSON manually. A recycled or malformed review file is not silently overwritten. Each file has the existing 30,000-character limit; saving fails explicitly rather than truncating history.
 
 A failed or uncertain save keeps your draft. After reloading, download your draft and explicitly load/discard to the newest saved response before retrying a conflicting save. Switching assignments cannot silently discard an unsaved response. Closing offers Save, Discard and Cancel. Replacing the active case preserves a dirty response for download instead of saving it into the new case.
+
+## Read-only ledger checks
+
+Open **Close → Ledger checks**, or search for Ledger checks. The selected month is shown together with the evidence cut-off. Journal findings cover that month; suspense is cumulative through the cut-off. Possible duplicate postings, repeated journal identifiers, unbalanced/invalid lines, invalid accounts/control contacts, missing source links, suspense and unmatched arrived bank lines can be investigated from here.
+
+Flags are advisory, not automatic corrections. An unsupported manual adjustment may be valid. Legitimate recurring journals can look similar. Inspect the evidence before reversing anything. Reversal-linked originals are excluded from duplicate-posting suggestions. CSV export contains all current findings, not only the visible page. No findings does not replace reconciliations, the full month review or professional judgement.
+
+Review notes now have task search, stage filters, bounded pages and an export of original findings and saved response history. Saving a review note never posts a correcting journal.
+
+## A less noisy inbox
+
+Inbox, Sent and Drafts are distinct. Only incoming unread correspondence counts as unread. Switching folders does not mark mail read. A link to a specific message clears stale filters so the requested message actually opens. All correspondence remains fictional.
+
+## Storage and recovery
+
+The amber banner identifies memory-only sessions or another tab changing the save. **Backup saved work**, Settings' backup action, or **Ctrl/Cmd+Shift+S** exports the confirmed saved state. Unsaved response/workbook drafts are excluded, so save or download them separately.
+
+The offline app does not replace corrupt browser data with a fresh case. Its recovery page offers the original stored text for download. Choose a valid backup and type **REPLACE SAVED DATA** before restoring. Starting a fresh case is a separate explicit choice with the same confirmation. Storage quota or access errors report a failed save and retain the previous confirmed state. Free space and retry; do not assume the onscreen change is already durable.
+
+Browser persistence belongs to the origin and browser profile, not the filename alone. A localhost/HTTP persistence check does not prove every browser permits durable `file://` storage. On origins without Web Locks, cross-tab writes retain revision checks but not the stronger lock guarantee. Regular exports remain necessary.
+
+Closing a dirty window uses a native modal with Save/Discard/Cancel and Escape to cancel. Repainting unrelated saved data preserves input focus and selection. Restoring even the same case invalidates older draft ownership, so an old response cannot silently overwrite restored work. An unsaved end-of-day note also blocks a silent close; record it with the date change, download it or deliberately discard it.
 
 ## Dates, saves and close controls remain separate
 

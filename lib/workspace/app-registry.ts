@@ -1,5 +1,5 @@
 /** Shared information architecture for the classic sidebar, desktop and search. */
-export const WORKSTATION_VERSION = '3.1.0';
+export const WORKSTATION_VERSION = '3.2.0';
 export const WORKSPACE_SECTIONS = [
     { id: 'today', name: 'Today', description: 'Priorities, correspondence and assignments' },
     { id: 'work', name: 'Work', description: 'Record transactions and reconcile the books' },
@@ -44,3 +44,9 @@ export const FINANCE_APPS = WORKSPACE_APPS.filter(app => app.id !== 'desktop');
 export const appsForSection = (section: WorkspaceSection) => WORKSPACE_APPS.filter(app => app.section === section);
 export const appById = (id: string) => WORKSPACE_APPS.find(app => app.id === id);
 export const isWorkspaceView = (id: string) => WORKSPACE_APPS.some(app => app.id === id);
+
+/** Desktop utilities share the same navigation/search catalogue without replacing accounting routes. */
+export const WORKSPACE_UTILITIES = [
+    { id: 'review-notes', name: 'Review notes', section: 'close', keywords: 'preparer responses review clearance history' },
+    { id: 'ledger-checks', name: 'Ledger checks', section: 'close', keywords: 'health exceptions duplicate suspense missing source bank' },
+] as const;

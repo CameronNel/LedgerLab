@@ -4,7 +4,7 @@ A fictional finance job for practising the work of a financial accountant: proce
 
 ## Start here
 
-**Current source release: Workstation 3.1.0, Clearer Daily Workspace.** Open `public/offline/LedgerLab-Workstation-v3.1.html` in a desktop browser. No installation or external scripts are required. The earlier v3 HTML is retained as a clearly named historical build.
+**Current source release: Workstation 3.2.0, Focused Work and Safer Saves.** Open `public/offline/LedgerLab-Workstation.html` in a desktop browser. No installation or external scripts are required. The earlier v3 HTML is retained as a clearly named historical build.
 
 The hosted application has **not** been deployed from this release. Repository source, standalone HTML and the privately hosted app are separate delivery surfaces. Do not assume a GitHub commit updates the live site.
 
@@ -16,13 +16,23 @@ The hosted application has **not** been deployed from this release. Repository s
 |---|---|
 | Today | Start with the next available assignment, arrivals and waiting items. |
 | Work | Journals, receivables, payables, bank, payroll, assets, inventory and tax. |
-| Close | Month-end controls, provisions, audit support and training review notes. |
+| Close | Month-end controls, actual-ledger diagnostics, provisions and training review notes. |
 | Reports | Company overview and financial statements from your actual ledger. |
 | Files | Read-only source evidence and editable supporting workpapers. |
 | Learn | Accounting explanations and targeted practice. |
 | Settings | Case setup, notebook and backups. |
 
 Use **Ctrl+K** or **Cmd+K** to search apps, available assignments, source documents, actual journals, account activity and lessons. Search never releases future evidence. **Open evidence + work** arranges an assignment's supporting document beside its working area. **Why is this on my desk?** explains the responsibility and required output without posting an answer.
+
+## What changed in 3.2
+
+Today puts actionable tasks above collapsed guidance. Search/filter/paginate arrived work, prioritise urgent controls and due follow-ups, and distinguish waiting inputs from completed work. Source processing uses readable source titles and retains the references.
+
+**Close → Ledger checks** finds possible duplicate postings, repeated IDs, missing source links, unbalanced/invalid entries, suspense balances and unmatched available bank lines. It is read-only and exports CSV; review flags are questions, not proof that an entry is wrong. Review notes also have filters, pagination and history export.
+
+Offline saves now reject corrupt stored state instead of silently creating a fresh case. Quota/blocked writes do not falsely report success. Recovery preserves raw stored text and requires an explicit confirmation before restoring a validated backup. Memory-only and cross-tab warnings stay visible. **Ctrl/Cmd+Shift+S** exports confirmed saved work, not unsaved drafts.
+
+Amounts accept a dot for decimals and properly grouped thousands: `1,234.56` is valid; ambiguous `1,2` is rejected rather than silently becoming 12. Mail has separate Inbox/Sent/Drafts folders, and outgoing correspondence no longer inflates unread counts. Native browser dialogs prevent background interaction during a close decision.
 
 ## What remains intact
 
@@ -46,7 +56,7 @@ Dependency-light checks with an existing TypeScript compiler and Node declaratio
 ```sh
 npm run test:portable
 npm run typecheck:standalone
-node scripts/desktop/bundle.mjs public/offline/LedgerLab-Workstation-v3.1.html
+node scripts/desktop/bundle.mjs public/offline/LedgerLab-Workstation.html
 ```
 
 See the verification record for actual executed browser commands and for the separate full-application and hosting checks. Syntax transpilation and standalone type checking are not a production build.
