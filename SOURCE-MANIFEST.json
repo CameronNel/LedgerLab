@@ -3,8 +3,8 @@
   "files": [
     {
       "path": ".github/workflows/workspace-ci.yml",
-      "bytes": 6343,
-      "sha256": "9922158b702e60dbbf40e1260aaae517b438244a150187a780c84b1768043686"
+      "bytes": 6542,
+      "sha256": "1fb8aab8e9131f46d02d51cb48c757ed800e782ed540f89b676c5ac2dbe9b684"
     },
     {
       "path": ".gitignore",
@@ -58,8 +58,8 @@
     },
     {
       "path": "app/layout.tsx",
-      "bytes": 597,
-      "sha256": "c79e595fe3cc92bfac292dd8ffe55b46d35ea7f0c087e44204f9c7e821602a38"
+      "bytes": 653,
+      "sha256": "093703bef77f85a24a0fc4a623f40b70f5efd5caadd2fafe4226f9fa4359cb36"
     },
     {
       "path": "app/page.tsx",
@@ -125,6 +125,11 @@
       "path": "components/ledgerlab/desktop/desktop.tsx",
       "bytes": 2898,
       "sha256": "6417394bbed08b65f4d7781355ee9e9979366d3fab5de73ed8923c73a8cb39fd"
+    },
+    {
+      "path": "components/ledgerlab/desktop/responsive.css",
+      "bytes": 484,
+      "sha256": "9f9e23c785842e48e37c21810fb12c565fcbdb309b16da2765cb30d26e30ed8a"
     },
     {
       "path": "components/ledgerlab/desktop/workspace.css",
@@ -613,8 +618,8 @@
     },
     {
       "path": "docs/current/guide.md",
-      "bytes": 8177,
-      "sha256": "8b9ce9c59127811661aaa463da2a5bfb8b3a5037e29834cf6cdae112860fe1b6"
+      "bytes": 7812,
+      "sha256": "9d382e88df2e40497214deed3ad72195e760a9232fbe03c431b78fb49ce7754f"
     },
     {
       "path": "docs/current/transactional-storage.md",
@@ -623,8 +628,8 @@
     },
     {
       "path": "docs/current/verification.md",
-      "bytes": 5488,
-      "sha256": "4a3c01749eab36e709b78fd31d942e8daade3c758ebbc35de744e1ab5f0f38dc"
+      "bytes": 5327,
+      "sha256": "48f3e83d7c02578d03493b9744da0c5b15dfed9c2f130f24c1b6d2e3eb1b9b42"
     },
     {
       "path": "drizzle.config.ts",
@@ -978,8 +983,8 @@
     },
     {
       "path": "public/offline/LedgerLab-Workstation.html",
-      "bytes": 900633,
-      "sha256": "2cd37de51f8bce4b1b90d263509aa135e5702ddcef7bc1424be092594ccce235"
+      "bytes": 901118,
+      "sha256": "6efc701df60fd5d3a80accb6101b6af0716831c80a8717871c7dc2d3df2ae23f"
     },
     {
       "path": "public/offline/LedgerLab-finance-takeover-guide.html",
@@ -1108,8 +1113,8 @@
     },
     {
       "path": "scripts/desktop/bundle.mjs",
-      "bytes": 3267,
-      "sha256": "528bf56cba3c7909ae20537eb330810c61bdb48c496e88821b6aca45225b3763"
+      "bytes": 3284,
+      "sha256": "3a2f34ece858baed56076905fa3cb5e2a8cd690cc0d9a6180b8f18add3f94ddf"
     },
     {
       "path": "scripts/desktop/check-browser.py",
@@ -1135,6 +1140,11 @@
       "path": "scripts/desktop/check-month-review.py",
       "bytes": 12975,
       "sha256": "3af57d801e42d30d74cddf7c193d31c3d5e02bb859935b9dd7f0503e6e3d7472"
+    },
+    {
+      "path": "scripts/desktop/check-responsive.py",
+      "bytes": 3077,
+      "sha256": "0f247f2cb5ddd87dc1f2be248b58c32fba244158644f23a14a0446cd361f25d5"
     },
     {
       "path": "scripts/desktop/check-source-syntax.mjs",

@@ -183,6 +183,24 @@
 .pc-recovery [role=alert]{padding:16px;background:#fff0df;border-radius:8px;color:#824820}
 @media(max-width:760px){.finance-pc .day-header{display:flex;padding:12px 16px}.finance-pc .day-header h1{font-size:19px}.finance-pc .day-header button{margin:0;font-size:11px}.finance-pc .day-desk main{padding:14px 16px}.day-filters{grid-template-columns:1fr 1fr}.day-filters>label:first-child{grid-column:1/-1}.pc-health{padding:16px}.finance-pc .pc-mail-toolbar>.pc-search{max-width:100%;width:100%}.pc-review-layout>nav{max-height:260px}}
 @media(max-width:600px){.finance-pc.pc-has-storage-warning{--pc-warning-height:72px}.pc-storage-banner{padding:7px 10px;font-size:11px;line-height:1.4}.pc-storage-banner button svg{display:none}.pc-storage-banner button{white-space:normal;max-width:95px}.finance-pc .day-stats>button{font-size:11px;padding:8px}.finance-pc .day-header{gap:10px}.day-pages{font-size:11px;gap:5px}.finance-pc .day-nav{padding:8px 16px}.pc-recovery{padding:25px 18px}.pc-review-filters{display:block}.pc-review-filters label{margin-bottom:10px!important}}
+
+/* Loaded last in both React and the standalone. Keep safety controls readable. */
+@media (max-width: 600px) {
+  .finance-pc .pc-storage-banner button {
+    min-width: 0;
+    max-width: 95px;
+    min-height: 40px;
+    white-space: normal;
+    justify-content: center;
+    text-align: center;
+  }
+  .finance-pc .pc-storage-banner button svg { display: none; }
+  .finance-pc .pc-storage-banner button span {
+    min-width: 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}
 </style></head><body><div id="desktop"></div><div id="preview-label">FICTIONAL TRAINING COMPANY · AUD 2025</div><script>(()=>{'use strict';const modules={"scripts/desktop/preview.ts":[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
