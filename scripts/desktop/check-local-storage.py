@@ -160,6 +160,7 @@ try:
     assert second.evaluate('ledgerlabPreview.session.load()')['ok']
     previous_revision = stored(page)['revision']
     corrupt(page, '{ corrupt saved workspace')
+    page.bring_to_front()
     page.reload(); page.locator('.pc-recovery').wait_for()
     ck(page.locator('.finance-pc').count() == 0, 'Corrupt startup stops before creating a fresh desktop')
     ck(stored(page) == '{ corrupt saved workspace', 'Corrupt payload is left untouched')
@@ -171,7 +172,9 @@ try:
     ck(stored(page) == '{ corrupt saved workspace', 'Rejected recovery does not overwrite data')
     page.locator('[data-recover-file]').set_input_files({'name':'case-backup.json','mimeType':'application/json','buffer':json.dumps({'state':backup}).encode()})
     page.wait_for_function('document.querySelector("[data-recover-status]").textContent.includes("Backup validated")')
-    page.screenshot(path=str(OUT/'storage-recovery.png'))
+    # The competing tab remains open for the stale-write check. Foreground this tab for the compositor.
+    page.bring_to_front()
+    page.screenshot(path=str(OUT/'storage-recovery.png'), animations='disabled')
     page.locator('[data-recover-confirm]').fill('REPLACE SAVED DATA')
     page.locator('[data-recover-restore]').click(); ready(page)
     ck(page.evaluate('ledgerlabPreview.model().state.notes') == backup['notes'], 'Validated backup recovery restores the original notebook')
