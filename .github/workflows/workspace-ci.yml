@@ -28,6 +28,7 @@ jobs:
         run: |
           export CHROMIUM=$(python -c 'from playwright.sync_api import sync_playwright; p=sync_playwright().start(); print(p.chromium.executable_path); p.stop()')
           python scripts/desktop/check-local-storage.py /tmp/LedgerLab-Workstation-v3.2.html /tmp/storage-check
+          python scripts/desktop/check-responsive.py /tmp/LedgerLab-Workstation-v3.2.html /tmp/responsive-check
           python scripts/desktop/check-clarity.py /tmp/LedgerLab-Workstation-v3.2.html /tmp/clarity-check
           python scripts/desktop/check-workspace.py /tmp/LedgerLab-Workstation-v3.2.html /tmp/ledgerlab-daily.json /tmp/workspace-check
           python scripts/desktop/check-workday.py /tmp/LedgerLab-Workstation-v3.2.html /tmp/ledgerlab-daily.json /tmp/workday-check
@@ -44,6 +45,8 @@ jobs:
           path: |
             /tmp/storage-check/*.png
             /tmp/storage-check/results.json
+            /tmp/responsive-check/*.png
+            /tmp/responsive-check/results.json
             /tmp/clarity-check/*.png
             /tmp/clarity-check/results.json
             /tmp/workspace-check/*.png

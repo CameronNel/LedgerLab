@@ -1,50 +1,39 @@
-# Workstation 3.2: verification and delivery record
+# Workstation 3.2: verified second pass
 
-18 September 2026. Second-pass baseline: `f1b7f316da2028316b013c05ec3bf2403e7a92a8` on `ux/clearer-daily-workspace`. The recovered local source tree matched GitHub tree `36de823d2ef5397f5af110076386e1a4271ed5e4` before editing. The previous 3.1 full application CI run `35318230562` completed successfully; its build limitation is historical, not a claim about 3.2.
+18 September 2026. The second-pass starting point was `f1b7f316da2028316b013c05ec3bf2403e7a92a8` on `ux/clearer-daily-workspace`. This record supersedes earlier statements that the full application had not been built and that Web Locks around localStorage were sufficient for offline concurrent saves.
 
-## Executed local checks
+## Completed integration run
 
-| Scope | Passed assertions |
-|---|---:|
-| Existing daily, monthly review, accounting, posting, persistence, career, desktop, workbook and 3.1 workspace checks | 76,910 |
-| New strict money parsing, offline storage/recovery, triage/pagination, mail, search and ledger diagnostics | 96 |
-| Existing five Chromium suites | 282 |
-| New clarity/safety Chromium journey | 45 |
+GitHub Actions run [35325647902](https://github.com/CameronNel/LedgerLab/actions/runs/35325647902), for source commit `894ece7ea8ae0e0ff83b595e2e05b763fff80dab`, completed successfully. Both the full-application and standalone jobs passed. Run [35325795911](https://github.com/CameronNel/LedgerLab/actions/runs/35325795911) subsequently passed those jobs and generated the verified release artifacts.
 
-Total local domain/API assertions: **77,006**. Total local browser assertions: **327**. These are checks, not that many independent real-world scenarios or professional certifications. All six completed browser drivers reported no uncaught page errors. Strict standalone compilation and syntax transpilation of 165 first-party TS/TSX files passed. The current standalone bundles 46 production/adapter modules without external runtime scripts or new runtime packages.
+The full-application job installed the locked dependencies and executed `npm run typecheck`, `npm test`, and `npm run build`. The standalone job ran the portable domain/API suites, strict standalone compilation, first-party syntax checks, bundle generation, and all seven Chromium drivers: transactional storage, clarity, workspace, workday, workstation, month review and clipboard.
 
-Local environment: Node 22.16.0, TypeScript 5.8.3, Python 3 and Chromium. The full dependency-backed application uses its locked compiler, not this global standalone compiler.
+The portable domain/API suite contains 77,006 assertions. The seven completed browser drivers recorded 366 assertions/milestones without uncaught page errors. These are checks, not independent real-world scenarios or professional certifications. The storage driver additionally runs 50 competing-writer rounds, alternating start order and checking one committed write, one rejected stale write, the exact winning payload, and a revision advanced exactly once. Repeated internal assertions are not represented as thousands of new scenarios.
 
-```sh
-LEDGERLAB_DAY_FIXTURE=/tmp/daily.json LEDGERLAB_REVIEW_FIXTURE=/tmp/review.json \
-  node scripts/accounting/run-portable.mjs
-tsc -p tsconfig.standalone.json
-node scripts/desktop/check-source-syntax.mjs
-node scripts/desktop/bundle.mjs /tmp/LedgerLab-Workstation-v3.2.html
-python scripts/desktop/check-clarity.py /tmp/LedgerLab-Workstation-v3.2.html /tmp/clarity-check
-python scripts/desktop/check-workspace.py /tmp/LedgerLab-Workstation-v3.2.html /tmp/daily.json /tmp/workspace-check
-python scripts/desktop/check-workday.py /tmp/LedgerLab-Workstation-v3.2.html /tmp/daily.json /tmp/workday-check
-python scripts/desktop/check-workstation.py /tmp/LedgerLab-Workstation-v3.2.html /tmp/workstation-check
-python scripts/desktop/check-month-review.py /tmp/LedgerLab-Workstation-v3.2.html /tmp/review.json /tmp/month-check
-python scripts/desktop/check-clipboard.py /tmp/LedgerLab-Workstation-v3.2.html /tmp/clipboard-check
-```
+## Defects found and addressed
 
-## Failure cases exercised
+Earlier revisions failed real-origin stress testing: two tabs could both acknowledge a same-revision localStorage write. The final standalone uses IndexedDB, with revision comparison and payload/revision updates inside one transaction. Save acknowledgement waits for transaction completion. The tests retain the original concurrency requirement; it was not removed or weakened.
 
-Malformed money grouping is rejected without changing raw input or saving a response. Valid grouped currency is saved as exact cents. Search/page changes preserve typing and clamp invalid pagination. Review and daily-response drafts survive unrelated refreshes; restoring even the same case makes an older draft stale. The native close dialog contains keyboard focus, prevents background focus and preserves the draft on Escape. Outgoing mail does not count as incoming unread work. Read-only ledger diagnostics and their CSV export do not change saved accounting state.
+Coverage includes a thrown quota error, transaction abort after a successful put, browser-process restart, lost acknowledgement with retry blocked until reload, operation without Web Locks, legacy migration with original bytes preserved, corrupt startup, explicit validated recovery, stale writes after recovery, and removed payloads without silent reseeding.
 
-Domain tests cover corrupt storage, explicit recovery confirmation, blocked/quota writes, removed saves, invalid envelopes, defensive copies and existing state-size limits. Diagnostics cover legitimate reversals, source references, account/contact validity, suspense, unreleased bank evidence and refusal to access worked-solution data. Screenshot inspection caught a clipped narrow-screen backup control; the layout was corrected and a viewport-bound assertion added.
+A separate recovery screenshot timed out when its tab was in the background. The driver foregrounds that tab before capture while retaining the second tab for the stale-write test. The full browser run then completed successfully.
 
-## Actual-origin persistence and hosted CI
+The second pass also added strict money-format validation, task prioritisation and pagination, clearer mail folders and unread counts, advisory ledger checks, review search/export, native close-dialog focus handling, and stronger unsaved-draft ownership checks. Financial command validation, source independence and the dated AUD 2025 teaching assumptions remain intact.
 
-The new `scripts/desktop/check-local-storage.py` serves the generated app on an isolated localhost origin with a temporary Chromium profile. It tests actual localStorage, page reload, browser-process restart, quota errors, competing same-revision tabs, corrupt startup, raw-data recovery download and explicit backup restore. It never touches a real user's browser profile or backups.
+## Final visual correction
 
-This local managed Chromium blocks localhost navigation with `ERR_BLOCKED_BY_ADMINISTRATOR`. That test is therefore delegated to the repository's GitHub CI environment, not replaced with a memory-only claim. The CI job also reruns the six UI suites. Its separate full-application job executes `npm ci`, `npm run typecheck`, `npm test` (now including workbook and clarity suites) and `npm run build`. Consult the commit's Actions results or the follow-up verification entry below for the terminal CI outcome.
+Inspection of the retained narrow-screen screenshot found that the backup button's text overflowed its border even though its border fitted the viewport. A shared responsive stylesheet now fixes that in both the React layout and standalone build. `check-responsive.py` checks the actual text rectangles, not only the border box, at 320, 390, 600, 768 and 1440 pixels. It also executes the small-screen backup action. All 20 checks passed locally; this eighth driver is now required in CI. Consult the latest source commit's Actions run for its final integrated outcome and screenshot artifact.
 
-## Delivery and limits
+## Reproducible delivery
 
-The current checked-in standalone is `public/offline/LedgerLab-Workstation.html`. The old 3.1 generated bundle is removed from the current source inventory, not erased from Git history. The original named v3 fallback is retained. The source pack has a complete SHA-256 inventory and is checked for safe unique paths and byte-identical rebuild outside Git.
+The CI package job runs only after both application and browser jobs succeed. It rebuilds `public/offline/LedgerLab-Workstation.html` twice and compares the files, refreshes `SOURCE-MANIFEST.json`, verifies the complete source archive and a byte-identical rebuild outside Git, and publishes the app/source/checksums as `ledgerlab-verified-release`.
 
-No hosted deployment, authentication change, schema migration, new statutory rate, live email/payment integration, consolidation, FX or parallel posting periods is included. All case assumptions remain the fictional AUD 2025 assumptions. The parser tightens invalid input, not financial calculation rules.
+For a same-repository pull request, only the generated HTML and source manifest may be committed by that job. A moved branch stops the write rather than overwriting newer work. Browser screenshots and JSON check summaries are a separate artifact; generated case fixtures and learner backups are not included in those deliverables. The artifact's `SOURCE-COMMIT.txt` identifies the packaged source. Consult the corresponding Actions run for any later source change.
 
-Memory-only UI checks do not establish persistent storage. Localhost profile-restart checks do not establish every browser's `file://` policy. Web Locks provide stronger cross-tab exclusion only where supported. Regular backup export is still necessary. Native Excel fidelity, real independent reviewer authority, freeform professional judgement and complete statutory AFS remain outside these tests.
+## Boundaries
+
+A production build passing is not a live deployment. The privately hosted application, its authentication and its database were not changed. The real-origin storage test uses an isolated localhost origin and disposable Chromium profile; it does not prove every browser's `file://` storage policy. Memory-only previews require exported backups.
+
+Consolidation, operational FX, additional operating years, simultaneous posting periods, payment execution, unrestricted AI correspondence, real multi-user reviewer permissions and independent professional-judgement grading were not added. Review clearances and diagnostic flags remain explicitly training/advisory checks.
+
+See [transactional storage and migration](transactional-storage.md) and the [daily guide](guide.md).
