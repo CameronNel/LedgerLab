@@ -2,6 +2,11 @@
   "format": "LedgerLab source package",
   "files": [
     {
+      "path": ".github/workflows/workspace-ci.yml",
+      "bytes": 2254,
+      "sha256": "af9354888e8b91e066571183dbe9962fb810ff76e9ee3b6626d6771442ef7543"
+    },
+    {
       "path": ".gitignore",
       "bytes": 627,
       "sha256": "4ce5d001242df924cea548df44f27edf09ba09ac9c8d63b9321e645b69ebacc9"
@@ -17,79 +22,24 @@
       "sha256": "e093979d1306d64567f1e2c762e3bdc73eb46eaf399d9884bdd3a2b4b55bc173"
     },
     {
+      "path": "CHANGELOG.md",
+      "bytes": 1302,
+      "sha256": "9660a162c0672710127483bf7ad33c096651a8a28beb059d892dc0e79f92fc0e"
+    },
+    {
       "path": "CHATGPT-START-HERE.md",
-      "bytes": 6084,
-      "sha256": "f1dc036fa522b8265798ac15af95540d8de15e020e758ad7219d79b237090375"
+      "bytes": 1180,
+      "sha256": "8917fb36af49cb6b4276cd09775b27d4aa90a51157a441bbedf6af8cb3594064"
     },
     {
-      "path": "CONTINUATION-2026-09-07.md",
-      "bytes": 7803,
-      "sha256": "4bb402e861d62130d51e6fd9bf478a54ef437e308e5c32f089951b8cb202f869"
-    },
-    {
-      "path": "DAY-BY-DAY-V3-VERIFICATION.md",
-      "bytes": 7124,
-      "sha256": "e86b448302c68ffb2303bee4dd64ef4c899122be268bf3292c7fa290e342034e"
-    },
-    {
-      "path": "DAY-BY-DAY-V3.md",
-      "bytes": 17185,
-      "sha256": "d1ac4afceb193a8622f8d72611207ec0207a66a91b9c259be1eb9d534acce8db"
-    },
-    {
-      "path": "FINANCE-PC-2026-09-07.md",
-      "bytes": 11101,
-      "sha256": "e9da99481350f250825ef65c4e8a51f2a83831d85237c5a7c164cc1814a2100d"
-    },
-    {
-      "path": "FINANCE-PC-VERIFICATION-2026-09-07.md",
-      "bytes": 6701,
-      "sha256": "41c6506c80037e4c80dc9614c3c4b24e2b187b9fe3a18b01c36ab2a4633ba514"
-    },
-    {
-      "path": "HANDOFF.md",
-      "bytes": 18963,
-      "sha256": "55fe4815050e2950b98994fd8b8c7928db2dfc10465fa9d2608cdfa13f26b6a4"
-    },
-    {
-      "path": "MONTH-REVIEW-V2.1-VERIFICATION.md",
-      "bytes": 6616,
-      "sha256": "a3357d312a65cd640df424d4a7da1314cb0be3bf91e392c90eceb7d8bc63d09b"
-    },
-    {
-      "path": "MONTH-REVIEW-V2.1.md",
-      "bytes": 7488,
-      "sha256": "6fde58d7940a096e4286c6fe970de9c7f4cc4b739bb7e5c9db12735d020e2024"
+      "path": "CONTRIBUTING.md",
+      "bytes": 1864,
+      "sha256": "1fc6a5ab6a9b27c566725c6004858e02f2f1fa6b49fb04e2859041f0c8c3d249"
     },
     {
       "path": "README.md",
-      "bytes": 12169,
-      "sha256": "dbb8d67e24d463f8580927b851dcb279ec19bf14c43ca5537b9b85177b2d2639"
-    },
-    {
-      "path": "TAKEOVER-2026-09-07.md",
-      "bytes": 11531,
-      "sha256": "3ea18d3cd456a4dbf77aaf41b67d5d2a103ec56d72e4b424f9f359f86cadaa1d"
-    },
-    {
-      "path": "TAKEOVER-VERIFICATION-2026-09-07.md",
-      "bytes": 5247,
-      "sha256": "12b7516edb42d82107bfa8b4ba9fb416732cfd7765e9e4e38948b88d0e7e5322"
-    },
-    {
-      "path": "VERIFICATION-2026-09-07.md",
-      "bytes": 6805,
-      "sha256": "7de1f27fbfb4579e5a7412055b3118a0a54fd6a9b677085743eae63ad7f6ca63"
-    },
-    {
-      "path": "WORKSTATION-V2-VERIFICATION.md",
-      "bytes": 6719,
-      "sha256": "8ec4a091a4a0e06f21114a663a0850a625e5c088b0dc30bc4c5dbb5feb9407df"
-    },
-    {
-      "path": "WORKSTATION-V2.md",
-      "bytes": 11249,
-      "sha256": "65d423aadb2f63787d947b770066e72103e570b32f064f8b2f159723c2de8c85"
+      "bytes": 4104,
+      "sha256": "e4af4f270fe9e5f70a09f04e0084cff03237abab0a6b68414bcf3d01f4b305c0"
     },
     {
       "path": "app/api/workspace/route.ts",
@@ -103,8 +53,8 @@
     },
     {
       "path": "app/globals.css",
-      "bytes": 30848,
-      "sha256": "4686c9ac653659b10cdf5dbf555749edbb2888f4b24b2a0705503b6f284f654b"
+      "bytes": 30905,
+      "sha256": "668106ca0460c8052eabcb7866dbc2a143a34b600307477c733704c003104f18"
     },
     {
       "path": "app/layout.tsx",
@@ -133,8 +83,8 @@
     },
     {
       "path": "components/ledgerlab/app.tsx",
-      "bytes": 15679,
-      "sha256": "902042de9066737a80d0bde97e0a89f39c2401e21f13eee4e181e9fd342bf602"
+      "bytes": 15367,
+      "sha256": "35a9716bd1c4203568de5d96ecf3af827098b935f03a10fc813757c933843e39"
     },
     {
       "path": "components/ledgerlab/balance-reconciliation.tsx",
@@ -175,6 +125,11 @@
       "path": "components/ledgerlab/desktop/desktop.tsx",
       "bytes": 2898,
       "sha256": "6417394bbed08b65f4d7781355ee9e9979366d3fab5de73ed8923c73a8cb39fd"
+    },
+    {
+      "path": "components/ledgerlab/desktop/workspace.css",
+      "bytes": 7212,
+      "sha256": "db0ef497bf238472cfeaa11af97c9b7550ea639a7720132bf6fb0ab87f0e54b0"
     },
     {
       "path": "components/ledgerlab/dialogs.tsx",
@@ -572,6 +527,101 @@
       "sha256": "e322deec158cfa9d9324d721588b3381fe9c7007dd4f1ad5dcfa49180ce3bf30"
     },
     {
+      "path": "docs/architecture/README.md",
+      "bytes": 3365,
+      "sha256": "778e72fdb28f41c890e1ad62fad04c07977991f88619998a4798918a864a0289"
+    },
+    {
+      "path": "docs/archive/2026-09-07/CHATGPT-START-HERE.md",
+      "bytes": 6084,
+      "sha256": "f1dc036fa522b8265798ac15af95540d8de15e020e758ad7219d79b237090375"
+    },
+    {
+      "path": "docs/archive/2026-09-07/CONTINUATION-2026-09-07.md",
+      "bytes": 7803,
+      "sha256": "4bb402e861d62130d51e6fd9bf478a54ef437e308e5c32f089951b8cb202f869"
+    },
+    {
+      "path": "docs/archive/2026-09-07/DAY-BY-DAY-V3-VERIFICATION.md",
+      "bytes": 7124,
+      "sha256": "e86b448302c68ffb2303bee4dd64ef4c899122be268bf3292c7fa290e342034e"
+    },
+    {
+      "path": "docs/archive/2026-09-07/DAY-BY-DAY-V3.md",
+      "bytes": 17185,
+      "sha256": "d1ac4afceb193a8622f8d72611207ec0207a66a91b9c259be1eb9d534acce8db"
+    },
+    {
+      "path": "docs/archive/2026-09-07/FINANCE-PC-2026-09-07.md",
+      "bytes": 11101,
+      "sha256": "e9da99481350f250825ef65c4e8a51f2a83831d85237c5a7c164cc1814a2100d"
+    },
+    {
+      "path": "docs/archive/2026-09-07/FINANCE-PC-VERIFICATION-2026-09-07.md",
+      "bytes": 6701,
+      "sha256": "41c6506c80037e4c80dc9614c3c4b24e2b187b9fe3a18b01c36ab2a4633ba514"
+    },
+    {
+      "path": "docs/archive/2026-09-07/HANDOFF.md",
+      "bytes": 18963,
+      "sha256": "55fe4815050e2950b98994fd8b8c7928db2dfc10465fa9d2608cdfa13f26b6a4"
+    },
+    {
+      "path": "docs/archive/2026-09-07/MONTH-REVIEW-V2.1-VERIFICATION.md",
+      "bytes": 6616,
+      "sha256": "a3357d312a65cd640df424d4a7da1314cb0be3bf91e392c90eceb7d8bc63d09b"
+    },
+    {
+      "path": "docs/archive/2026-09-07/MONTH-REVIEW-V2.1.md",
+      "bytes": 7488,
+      "sha256": "6fde58d7940a096e4286c6fe970de9c7f4cc4b739bb7e5c9db12735d020e2024"
+    },
+    {
+      "path": "docs/archive/2026-09-07/README.md",
+      "bytes": 12187,
+      "sha256": "52f91a1b72a133ce39660e237176714dbb56416e03d899dc864dfeb85c529a38"
+    },
+    {
+      "path": "docs/archive/2026-09-07/TAKEOVER-2026-09-07.md",
+      "bytes": 11531,
+      "sha256": "3ea18d3cd456a4dbf77aaf41b67d5d2a103ec56d72e4b424f9f359f86cadaa1d"
+    },
+    {
+      "path": "docs/archive/2026-09-07/TAKEOVER-VERIFICATION-2026-09-07.md",
+      "bytes": 5247,
+      "sha256": "12b7516edb42d82107bfa8b4ba9fb416732cfd7765e9e4e38948b88d0e7e5322"
+    },
+    {
+      "path": "docs/archive/2026-09-07/VERIFICATION-2026-09-07.md",
+      "bytes": 6805,
+      "sha256": "7de1f27fbfb4579e5a7412055b3118a0a54fd6a9b677085743eae63ad7f6ca63"
+    },
+    {
+      "path": "docs/archive/2026-09-07/WORKSTATION-V2-VERIFICATION.md",
+      "bytes": 6719,
+      "sha256": "8ec4a091a4a0e06f21114a663a0850a625e5c088b0dc30bc4c5dbb5feb9407df"
+    },
+    {
+      "path": "docs/archive/2026-09-07/WORKSTATION-V2.md",
+      "bytes": 11249,
+      "sha256": "65d423aadb2f63787d947b770066e72103e570b32f064f8b2f159723c2de8c85"
+    },
+    {
+      "path": "docs/archive/README.md",
+      "bytes": 434,
+      "sha256": "f4eaa4e28d23110dd58e388e21fb8a2db6327aa04c25ce4ea68bc8e160bc04e0"
+    },
+    {
+      "path": "docs/current/guide.md",
+      "bytes": 4436,
+      "sha256": "0d762398e0ae10811cb2d5045042661ecf5ac87f1c7b0db2a009e9b1493c3395"
+    },
+    {
+      "path": "docs/current/verification.md",
+      "bytes": 3969,
+      "sha256": "63880c5f55fd4fed880cf2218da41ef91bfc42d00db96b2e2b051951a93dce7d"
+    },
+    {
       "path": "drizzle.config.ts",
       "bytes": 148,
       "sha256": "af081f7384aaeb0082cf422e29f139d137ca2f6a57c69b2c37b9fb1f8479867b"
@@ -727,9 +777,14 @@
       "sha256": "00d73b287925486cc7d2736f0d79250387ab454e6307a3cb5d1d4f2872f958a2"
     },
     {
+      "path": "lib/desktop/command-palette.ts",
+      "bytes": 3945,
+      "sha256": "64bb880d356004b39178a60784dbc389d25c7ca5e1f35cf2fc4addd407f207c1"
+    },
+    {
       "path": "lib/desktop/day-desk.ts",
-      "bytes": 24840,
-      "sha256": "3ab9c02666f063f39f2f41ac468f46148504b9719328387360330973ceb8cf3e"
+      "bytes": 25443,
+      "sha256": "5ce14fbb586cae0bf54a3f678626c6c435196ded1802861c277c34c43d949b63"
     },
     {
       "path": "lib/desktop/dialog.ts",
@@ -738,18 +793,48 @@
     },
     {
       "path": "lib/desktop/files.ts",
-      "bytes": 23296,
-      "sha256": "760ad5575815773e7086fb638917c34e5ce54ed8e012a35f21e3c2b43653f5c4"
+      "bytes": 22298,
+      "sha256": "5256bd93f7fe41f3a1b2229c7c1ab455ea0308598719ba08fcce4a550fe442be"
+    },
+    {
+      "path": "lib/desktop/icons.ts",
+      "bytes": 2072,
+      "sha256": "8a3dc44465aba20eca586f3f0e2ce4eeabf9f01df316cfd39c7d7fd947a13d7d"
+    },
+    {
+      "path": "lib/desktop/inspection.ts",
+      "bytes": 1975,
+      "sha256": "581d007cd8015ccb5a6d1a765474ad27be01f41c9b2ecfc2f07b40bbae51a1ba"
+    },
+    {
+      "path": "lib/desktop/review-desk.ts",
+      "bytes": 8757,
+      "sha256": "bb6cf53e27a14454867834ff3f705252b6ab5b27c9a586ebfa24a24114208ff0"
+    },
+    {
+      "path": "lib/desktop/review-notes.ts",
+      "bytes": 5974,
+      "sha256": "86725c38d5f64d9308ea1a726f60440d301ad229f3cfc6c1a02e7dae4f4b2a9d"
+    },
+    {
+      "path": "lib/desktop/search-index.ts",
+      "bytes": 3277,
+      "sha256": "c786d395cdea679cb63d2b6c489702df57b0381c5dc25c88dde24b15f241fa5e"
     },
     {
       "path": "lib/desktop/shell.ts",
-      "bytes": 58493,
-      "sha256": "4fc34ec746bb2bde8b5615594b21fbd1754f867f559b74a32d9be62744cb3bd4"
+      "bytes": 59621,
+      "sha256": "c63d091c6cab36a8c665e5d2035ea13261c6c9607def59da3366af02323ec3cb"
     },
     {
       "path": "lib/desktop/spreadsheet.ts",
       "bytes": 47997,
       "sha256": "cd6e4105bf219ff3ce200e327736d9b358bb7b69beefe3f47bfe14a8a8441972"
+    },
+    {
+      "path": "lib/desktop/task-guidance.ts",
+      "bytes": 1619,
+      "sha256": "1490450542aa8f4f6c7e324aa044448f8320f5ecef708dc93ba2cfe63aa2dfca"
     },
     {
       "path": "lib/desktop/types.ts",
@@ -777,9 +862,19 @@
       "sha256": "460bdc419994bda92721f88fa707e392ad43989bcf1bdc9e96f4c7509d887c18"
     },
     {
+      "path": "lib/desktop/workspace-menu.ts",
+      "bytes": 1029,
+      "sha256": "eaefd7552833ef4b2315a40659028ebf577d6d78a718cb47a519a86faa8bdb5d"
+    },
+    {
       "path": "lib/utils.ts",
       "bytes": 177,
       "sha256": "53f3d3d070f0a9082934da25b875f9499855c2b0693868dd28be8c23d8730f68"
+    },
+    {
+      "path": "lib/workspace/app-registry.ts",
+      "bytes": 4415,
+      "sha256": "26234aeff4f223cc23dc0203db785092f0b06ca6a984245d81651c3d02083f1b"
     },
     {
       "path": "lib/workspace/notebook-draft.ts",
@@ -808,8 +903,8 @@
     },
     {
       "path": "package.json",
-      "bytes": 2828,
-      "sha256": "aa698bebd27ea896d7baaecdf8de9e221cb9db4622681dbb2f8d92365377deda"
+      "bytes": 2949,
+      "sha256": "1543ac27874b69d5668607e00f2af678e6ca94ac5578949b43ebaec7d5cd4d63"
     },
     {
       "path": "postcss.config.mjs",
@@ -840,6 +935,11 @@
       "path": "public/offline/LedgerLab-Workstation-v3-Day-by-Day.html",
       "bytes": 759880,
       "sha256": "20e72ef86749d5f7e7f39d61be468f6a11442964c1fcc964910ce4b6f9214b3e"
+    },
+    {
+      "path": "public/offline/LedgerLab-Workstation-v3.1.html",
+      "bytes": 844221,
+      "sha256": "fa0a7fd060550cdb4394ee5e4e3d5d31276238fd536bba95207f901622e8be85"
     },
     {
       "path": "public/offline/LedgerLab-finance-takeover-guide.html",
@@ -908,13 +1008,13 @@
     },
     {
       "path": "scripts/accounting/run-portable.mjs",
-      "bytes": 3132,
-      "sha256": "f8d3b730d3127bb202b934e948a4f6fc841e0b2544f84e6b02f0790983a1c49a"
+      "bytes": 3165,
+      "sha256": "34af8985669e0b9ac42e1ae766130aae6822b5758bc47a153d5aaf2535fdd993"
     },
     {
       "path": "scripts/accounting/run.mjs",
-      "bytes": 1282,
-      "sha256": "96b3175a67b3596d455028d17b65fd34c34c615584dce94551feadc9fcb93f9c"
+      "bytes": 1324,
+      "sha256": "e6f98f0a86d8caec810d69a16f464cc120745142cb5ee1dfc73594697b1495bd"
     },
     {
       "path": "scripts/accounting/workbook-check.ts",
@@ -930,6 +1030,11 @@
       "path": "scripts/accounting/workflow-check.ts",
       "bytes": 23396,
       "sha256": "3238fe20c866eda5eded3d54162596890f40755333eb88f147b71f990c3a943b"
+    },
+    {
+      "path": "scripts/accounting/workspace-check.ts",
+      "bytes": 8428,
+      "sha256": "9e34f4099a6efd22ee4cac9f304fb8d50d481bb1ee8e64fc4c2d12e6c53a9e03"
     },
     {
       "path": "scripts/browser/README.md",
@@ -958,8 +1063,8 @@
     },
     {
       "path": "scripts/desktop/bundle.mjs",
-      "bytes": 3242,
-      "sha256": "201c818cdfca5b0b2403a949b02579e09b209c19b551aa5ef7a39b86c2bda4e6"
+      "bytes": 3291,
+      "sha256": "d11e907e0adc8da6e2f758ba0fb8f4aa46d9ef9dd8f7c8fca6e78bc9b3fa412b"
     },
     {
       "path": "scripts/desktop/check-browser.py",
@@ -985,6 +1090,11 @@
       "path": "scripts/desktop/check-workday.py",
       "bytes": 17013,
       "sha256": "b0194cbab6b4a81bb1541bb44f9c146074d610fdec668680bba201be9a34d718"
+    },
+    {
+      "path": "scripts/desktop/check-workspace.py",
+      "bytes": 10007,
+      "sha256": "08cab289223cd88dd7e5cfc726dfa4a5af87478d2f42415f364b293a7aeb5c5a"
     },
     {
       "path": "scripts/desktop/check-workstation.py",

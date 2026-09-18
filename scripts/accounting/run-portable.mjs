@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-const modes = { workday: 'workday-check.ts', review: 'month-review-check.ts', check: 'check.ts', workflows: 'workflow-check.ts', persistence: 'persistence-check.ts', career: 'career-check.ts', desktop: 'desktop-check.ts', workbook: 'workbook-check.ts' };
+const modes = { workspace: 'workspace-check.ts', workday: 'workday-check.ts', review: 'month-review-check.ts', check: 'check.ts', workflows: 'workflow-check.ts', persistence: 'persistence-check.ts', career: 'career-check.ts', desktop: 'desktop-check.ts', workbook: 'workbook-check.ts' };
 const selected = process.argv.slice(2);
 const names = selected.length ? selected : Object.keys(modes);
 if (names.some(name => !modes[name])) throw new Error(`Use ${Object.keys(modes).join(', ')} or no arguments for all suites.`);

@@ -1,0 +1,5 @@
+import { WORKSPACE_SECTIONS, appsForSection, type WorkspaceSection } from '../workspace/app-registry';
+import { htmlEscape as e } from '../accounting/exports';
+export function workspaceMenuHTML(section?: WorkspaceSection): string {
+    return WORKSPACE_SECTIONS.filter(group => !section || group.id === section).map(group => `<section class="pc-menu-section"><h2>${e(group.name)}</h2><p>${e(group.description)}</p><div class="pc-start-apps">${appsForSection(group.id).map(app => app.id === 'desktop' ? '<button type="button" data-action="career">Today</button>' : `<button type="button" data-app="${e(app.id)}">${e(app.name)}</button>`).join('')}${group.id === 'today' ? '<button type="button" data-action="mail">Inbox</button>' : ''}${group.id === 'close' ? '<button type="button" data-action="review-notes">Review notes</button>' : ''}${group.id === 'files' ? '<button type="button" data-action="drive">Finance drive</button><button type="button" data-action="work">Working papers</button>' : ''}</div></section>`).join('');
+}
