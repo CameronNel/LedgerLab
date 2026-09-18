@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "@/components/ledgerlab/desktop/responsive.css";
 
 export const metadata: Metadata = {
   title: "LedgerLab · Accounting practice",

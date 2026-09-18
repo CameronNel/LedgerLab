@@ -1,0 +1,17 @@
+/* Loaded last in both React and the standalone. Keep safety controls readable. */
+@media (max-width: 600px) {
+  .finance-pc .pc-storage-banner button {
+    min-width: 0;
+    max-width: 95px;
+    min-height: 40px;
+    white-space: normal;
+    justify-content: center;
+    text-align: center;
+  }
+  .finance-pc .pc-storage-banner button svg { display: none; }
+  .finance-pc .pc-storage-banner button span {
+    min-width: 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}

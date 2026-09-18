@@ -1,8 +1,11 @@
 // All ledger values are safe integer cents. No binary-float summation in journals.
 export function cents(value: number): number { const n=Math.round((value+Number.EPSILON)*100); if(!Number.isSafeInteger(n))throw new Error('Amount is outside the supported range.'); return n; }
 export function parseMoney(value: string): number {
- const clean=value.trim().replace(/,/g,'');
- if(!/^-?\d+(\.\d{0,2})?$/.test(clean)) throw new Error('Enter an amount with at most two decimal places.');
+ const input=value.trim();
+ // Commas are grouping separators, not decimal separators. Never turn 1,2 into 12.
+ if(!/^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d{0,2})?$/.test(input))
+  throw new Error('Enter an amount with at most two decimal places. Use a dot for decimals and commas only in groups of three (1,234.56).');
+ const clean=input.replace(/,/g,'');
  const negative=clean.startsWith('-'); const [whole,fraction='']=clean.replace('-','').split('.');
  const n=Number(whole)*100+Number(fraction.padEnd(2,'0'));
  if(!Number.isSafeInteger(n)||n>100_000_000_000) throw new Error('Amount is too large.');

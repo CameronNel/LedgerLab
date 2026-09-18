@@ -1,0 +1,149 @@
+/* Workspace navigation, search and review. Existing accounting styles are untouched. */
+.finance-pc{--pc-navigation-height:58px}
+.finance-pc .pc-stage{top:var(--pc-navigation-height)}
+.pc-navigation{position:absolute;inset:0 0 auto;height:var(--pc-navigation-height);display:flex;align-items:center;gap:5px;padding:8px 18px;z-index:31;background:#f7fafb;border-bottom:1px solid #cedee2;overflow-x:auto;scrollbar-width:thin;white-space:nowrap}
+.pc-navigation>strong{font-size:18px;letter-spacing:-.5px;margin-right:15px;color:#23485a;flex-shrink:0}
+.pc-navigation>strong small{font-size:10px;font-weight:500;letter-spacing:0;color:#617883;margin-left:5px}
+.finance-pc .pc-navigation>button{padding:9px 14px;border-radius:7px;min-height:38px;font-size:13px;font-weight:600;flex-shrink:0}
+.finance-pc .pc-navigation>button:hover,.finance-pc .pc-navigation>button:focus-visible{background:#dcefeb;color:#185f5c}
+.finance-pc .pc-navigation>.pc-global-search{margin-left:auto;border:1px solid #cbdcdf;color:#315864;background:#fff}
+.pc-global-search kbd{font-family:inherit;font-size:10px;color:#647e89;margin-left:18px;background:#eff4f5;padding:3px 5px;border-radius:3px}
+.pc-menu-section{padding:13px 0;border-top:1px solid #dce7e9}
+.pc-menu-section>p{font-size:11px;color:#617981;margin-bottom:8px!important}
+.pc-menu-section>h2{margin-bottom:4px!important}
+.workspace-section-toggle{display:flex;align-items:center;justify-content:space-between;width:100%;padding:10px 8px;color:#d9e5f3;font-size:14px;font-weight:600;text-align:left;border-radius:6px}
+.workspace-section-toggle:hover{background:#244363}
+.workspace-section-toggle[aria-expanded=true] svg{transform:rotate(90deg)}
+.workspace-section-toggle:focus-visible{outline:2px solid #b4d7fc}
+.pc-command-palette{width:720px;max-width:calc(100vw - 28px);max-height:85dvh;padding:24px;border:1px solid #b8d1d8;border-radius:14px;background:#fff;color:#203e4e;box-shadow:0 25px 100px #081e3c55;font:14px/1.5 "Segoe UI",Arial,sans-serif;overflow:hidden}
+.pc-command-palette::backdrop{background:#071e37aa}
+.pc-command-palette header{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.pc-command-palette h2{font-size:23px;margin:0!important}
+.finance-pc .pc-command-palette [data-search-close]{font-size:25px;padding:0 12px;border-radius:6px}
+.pc-command-palette label{display:block;color:#5d7480;font-size:12px;margin-bottom:10px}
+.pc-command-palette input{width:100%;min-height:46px;border:1px solid #aecad3;border-radius:7px;padding:10px 13px;background:#f7fafb;font:inherit}
+.pc-search-count{color:#617981;font-size:11px;margin:10px 0!important}
+.pc-search-results{max-height:48dvh;overflow:auto;overscroll-behavior:contain;border-block:1px solid #e1e9ec}
+.finance-pc .pc-search-results button{display:flex;align-items:center;gap:12px;text-align:left;width:100%;padding:12px;border-bottom:1px solid #edf1f3;border-radius:5px;min-height:64px}
+.pc-search-results button>span:last-child{min-width:0}
+.pc-search-results strong{display:block;font-size:13px;overflow-wrap:anywhere}
+.pc-search-results small{display:block;color:#586f7b;font-size:11px;white-space:normal}
+.finance-pc .pc-search-results button[data-selected=true],.finance-pc .pc-search-results button:hover{background:#e6f3ee;box-shadow:inset 3px 0 #227b6e}
+.pc-search-kind{width:57px;flex-shrink:0;text-transform:uppercase;font-size:9px;font-weight:700;color:#426976}
+.pc-command-palette footer{margin-top:12px;color:#617981;font-size:11px}
+.pc-search-empty{padding:25px 12px}
+.day-purpose,.day-waiting{padding:16px 20px;border:1px solid #d5e4e7;border-radius:10px;background:#eef6f5;margin:18px 0}
+.day-purpose summary{font-weight:700;cursor:pointer;color:#286b65}
+.day-purpose dt{font-weight:700;font-size:12px;margin-top:12px}
+.day-purpose dd{margin:4px 0 10px;font-size:13px;color:#425967}
+.day-purpose p{font-size:11px;color:#58717c}
+.pc-inspection{height:100%;overflow:auto;padding:25px;color:#263d4c;font-size:13px}
+.pc-inspection h1{font-size:23px;margin-bottom:12px!important}
+.pc-inspection h2{font-size:16px;margin:16px 0 8px!important}
+.pc-inspection p{margin:10px 0!important}
+.pc-inspection article{border-bottom:1px solid #dce6e9;padding:12px 0}
+.pc-inspection-table{overflow:auto}
+.pc-inspection table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;margin:10px 0}
+.pc-inspection :is(td,th){text-align:right;padding:9px;border-bottom:1px solid #dbe5e8;white-space:nowrap}
+.pc-inspection :is(td,th):first-child{text-align:left;white-space:normal}
+.finance-pc .pc-inspection button{padding:8px 12px;background:#e6f2ef;border-radius:5px;color:#23695e}
+.pc-review-desk{height:100%;overflow:auto;background:#f6f9fa;padding:24px;color:#253f4f;font-size:13px}
+.pc-review-desk header{padding-bottom:16px;border-bottom:1px solid #d5e2e6}
+.pc-review-desk h1{font-size:24px;margin:7px 0!important}
+.pc-review-desk h2{font-size:18px;margin:5px 0 12px!important}
+.pc-review-desk p{margin:10px 0!important}
+.pc-review-layout{display:grid;grid-template-columns:minmax(200px,29%) minmax(0,1fr);gap:22px;margin-top:16px}
+.pc-review-layout>nav{max-height:60dvh;overflow:auto;overscroll-behavior:contain}
+.finance-pc .pc-review-layout>nav>button{display:block;width:100%;padding:12px;text-align:left;background:white;border:1px solid #d6e2e6;border-radius:6px;margin-bottom:7px}
+.pc-review-layout>nav>button strong{display:block;font-size:12px}
+.pc-review-desk small{display:block;font-size:11px;color:#617981}
+.finance-pc .pc-review-layout>nav>button[aria-current=true]{background:#e4f1ec;border-color:#368b79}
+.pc-review-desk label{display:block;font-weight:600;margin:14px 0}
+.pc-review-desk :is(textarea,select){display:block;width:100%;font:inherit;border:1px solid #b8cdd5;padding:10px;margin-top:6px;background:#fff;border-radius:6px;color:#203e50}
+.pc-review-actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.finance-pc .pc-review-actions button,.finance-pc .pc-review-desk [data-review-open]{padding:9px 12px;border:1px solid #a8c5c9;border-radius:6px;background:#fff}
+.finance-pc .pc-review-desk [data-review-save]{background:#216a62;color:#fff;border-color:#216a62}
+.pc-review-desk details{margin:16px 0;border-top:1px solid #d9e4e8;padding-top:12px}
+.pc-review-desk summary{font-weight:650;cursor:pointer}
+.pc-review-desk details article{padding:14px 0;border-bottom:1px solid #d9e4e8}
+.pc-review-error{padding:12px;border-radius:6px;background:#fff1e8;color:#8f4823}
+.pc-review-message:not(:empty){padding:12px;background:#e4f2eb;border-radius:6px}
+@media(max-width:900px){.pc-navigation{padding:6px 10px;gap:2px}.pc-navigation>strong{font-size:15px;margin-right:8px}.pc-navigation>strong small,.pc-global-search kbd{display:none}.finance-pc .pc-navigation>button{padding:8px 10px}.pc-review-layout{grid-template-columns:1fr}.pc-review-layout>nav{max-height:220px}}
+@media(max-width:600px){.pc-navigation>strong{display:none}.finance-pc .pc-navigation>button{padding:8px;font-size:12px}.pc-navigation{gap:0}.pc-command-palette{padding:15px}.pc-review-desk{padding:16px}.pc-navigation .pc-global-search{margin-left:5px!important}}
+@media(prefers-reduced-motion:reduce){.finance-pc *{scroll-behavior:auto!important}}
+
+/* 3.2: reserve space for persistence warnings instead of covering working windows. */
+.finance-pc{--pc-warning-height:0px}
+.finance-pc.pc-has-storage-warning{--pc-warning-height:42px}
+.finance-pc .pc-stage{top:calc(var(--pc-navigation-height) + var(--pc-warning-height))}
+.pc-storage-banner{box-sizing:border-box;position:absolute;top:var(--pc-navigation-height);left:0;right:0;height:var(--pc-warning-height);z-index:32;display:flex;gap:12px;align-items:center;padding:6px 18px;background:#fff2d4;color:#684718;font-size:12px;border-bottom:1px solid #dbc18b}
+.pc-storage-banner[hidden]{display:none!important}
+.pc-storage-banner>span{flex:1;min-width:0}
+.finance-pc .pc-storage-banner button{flex-shrink:0;border:1px solid #ad843e;border-radius:5px;padding:5px 9px;display:flex;gap:6px;align-items:center;white-space:nowrap;background:#fffaf0;color:#5a411c}
+.finance-pc .pc-navigation>button[aria-current=page]{background:#dcefeb;color:#185f5c;box-shadow:inset 0 -2px #23695e}
+/* Native dialog, in the browser top layer. There is no interactive background. */
+.finance-pc dialog.pc-modal-backdrop{position:fixed;inset:0;margin:auto;padding:0;border:0;display:none;width:min(540px,calc(100vw - 32px));max-height:calc(100dvh - 32px);height:fit-content;background:transparent;overflow:auto}
+.finance-pc dialog.pc-modal-backdrop[open]{display:block}
+.finance-pc dialog.pc-modal-backdrop::backdrop{background:#10283499}
+.finance-pc dialog.pc-modal-backdrop .pc-modal{width:100%;max-width:none;margin:0;box-shadow:none}
+/* Today puts work above instructions and avoids repeating the date in a giant tile. */
+.finance-pc .day-header{padding:12px 22px;align-items:center}
+.finance-pc .day-header h1{font-size:22px;margin:4px 0!important}
+.finance-pc .day-header p{font-size:12px;margin:0!important}
+.finance-pc .day-nav{padding:9px 22px}
+.finance-pc .day-nav button{font-size:12px;padding:7px 11px}
+.finance-pc .day-desk main{padding:16px 22px 28px}
+.finance-pc .day-hero{display:block}
+.finance-pc .day-hero aside{display:none}
+.finance-pc .day-hero>div{padding:15px 18px}
+.finance-pc .day-hero h2{font-size:19px;margin:5px 0 8px!important}
+.finance-pc .day-hero p{font-size:13px;margin:7px 0!important;max-width:none}
+.finance-pc .day-hero button{font-size:12px;margin-top:7px}
+.finance-pc .day-stats{margin:12px 0;gap:8px}
+.finance-pc .day-stats>button{padding:9px 13px;font-size:12px;display:flex;gap:10px;align-items:center}
+.finance-pc .day-stats b{font-size:21px}
+.finance-pc .day-section-head{margin:13px 0 9px}
+.finance-pc .day-task{padding:10px 12px;font-size:13px}
+.finance-pc .day-triage{display:flex;gap:6px;flex-wrap:wrap;margin:16px 0}
+.finance-pc .day-triage button{font-size:11px;padding:7px 9px;background:#eaf2f4}
+.finance-pc .day-routine,.finance-pc .day-help{padding:12px 16px;margin:12px 0}
+.finance-pc :is(.day-routine,.day-help)>summary{cursor:pointer;font-size:13px;font-weight:600;color:#315563}
+.day-waiting-item{display:block;width:100%;text-align:left;margin:6px 0}
+.day-waiting-item span{font-size:12px}
+.day-filters{display:grid;grid-template-columns:minmax(180px,1.5fr) repeat(2,minmax(140px,1fr));gap:12px;align-items:end}
+.finance-pc .day-filters label{margin:0}
+.day-pages{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:16px 0;font-size:12px}
+.day-empty{padding:22px;border:1px dashed #bdcdd4;border-radius:8px;background:#fff}
+.finance-pc .day-desk .day-evidence button{text-align:left;white-space:normal;max-width:100%;font-size:12px}
+.finance-pc .day-response .day-submit-actions{position:sticky;bottom:0;background:#fff;padding:10px 0;border-top:1px solid #dce5ee;z-index:2}
+.finance-pc .day-desk [aria-invalid=true]{border-color:#aa463c;box-shadow:0 0 0 1px #aa463c}
+.day-note-draft{padding:8px 22px;background:#fff4d9;font-size:12px}
+.pc-health{height:100%;overflow:auto;background:#f5f8fa;padding:22px;color:#263f4c;font:13px/1.55 system-ui,sans-serif}
+.pc-health h1{font-size:23px;margin:5px 0 10px!important}
+.pc-health h2{font-size:16px;margin:10px 0!important}
+.pc-health-scope{background:#eaf2f5;padding:12px;border-radius:7px}
+.pc-health-toolbar,.pc-health-links{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pc-health-toolbar label{display:flex;gap:8px;align-items:center;flex:1}
+.pc-health :is(button,select),.pc-review-desk :is([data-review-query],[data-review-filter]){border:1px solid #b7cdd5;border-radius:5px;padding:8px 10px;background:#fff;color:#294e61;font:inherit}
+.pc-health-finding{background:#fff;border:1px solid #d8e3e8;border-left:4px solid #bc913e;border-radius:7px;padding:16px;margin:12px 0}
+.pc-health-finding[data-severity=error]{border-left-color:#af4e43}
+.pc-health p{margin:10px 0!important}
+.pc-health-links{font-size:12px}
+.pc-health-links details{width:100%}
+.pc-health-links details button{margin:5px}
+.pc-review-filters{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0}
+.pc-review-filters label{flex:1;min-width:160px;margin:0!important}
+.pc-review-filters input{width:100%;margin-top:6px}
+.pc-review-filters select{margin-bottom:0}
+.pc-review-filters>button{border:1px solid #b7cdd5;border-radius:5px;padding:8px 10px;align-self:end;background:white}
+.pc-review-pages{display:flex;gap:8px;justify-content:space-between;align-items:center;padding:8px 0;font-size:11px}
+.pc-review-pages button{border:1px solid #bdd0d7;border-radius:5px;background:white;padding:6px}
+.finance-pc .pc-mail-toolbar{gap:10px;flex-wrap:wrap;min-height:68px;height:auto}
+.pc-mail-toolbar>label:not(.pc-unread-filter){font-size:11px}
+.pc-mail-toolbar select{border:1px solid #bdd0d7;border-radius:5px;padding:6px;background:white;color:#264c5f;font:inherit}
+.pc-recovery{box-sizing:border-box;max-width:740px;height:100dvh;overflow:auto;margin:0 auto;padding:50px 30px;color:#243f50;font:15px/1.65 system-ui,sans-serif}
+.pc-recovery h1{font-size:28px}.pc-recovery label{display:block;margin:18px 0}
+.pc-recovery :is(input,button){display:block;padding:10px 14px;border:1px solid #bacdd6;border-radius:6px;background:#f7fafb;margin-top:8px;font:inherit;max-width:100%}
+.pc-recovery [role=alert]{padding:16px;background:#fff0df;border-radius:8px;color:#824820}
+@media(max-width:760px){.finance-pc .day-header{display:flex;padding:12px 16px}.finance-pc .day-header h1{font-size:19px}.finance-pc .day-header button{margin:0;font-size:11px}.finance-pc .day-desk main{padding:14px 16px}.day-filters{grid-template-columns:1fr 1fr}.day-filters>label:first-child{grid-column:1/-1}.pc-health{padding:16px}.finance-pc .pc-mail-toolbar>.pc-search{max-width:100%;width:100%}.pc-review-layout>nav{max-height:260px}}
+@media(max-width:600px){.finance-pc.pc-has-storage-warning{--pc-warning-height:72px}.pc-storage-banner{padding:7px 10px;font-size:11px;line-height:1.4}.pc-storage-banner button svg{display:none}.pc-storage-banner button{white-space:normal;max-width:95px}.finance-pc .day-stats>button{font-size:11px;padding:8px}.finance-pc .day-header{gap:10px}.day-pages{font-size:11px;gap:5px}.finance-pc .day-nav{padding:8px 16px}.pc-recovery{padding:25px 18px}.pc-review-filters{display:block}.pc-review-filters label{margin-bottom:10px!important}}

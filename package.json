@@ -1,6 +1,6 @@
 {
   "name": "ledgerlab-accounting-practice",
-  "version": "0.1.0",
+  "version": "3.2.0",
   "private": true,
   "engines": {
     "node": ">=22.13.0"
@@ -10,7 +10,7 @@
     "dev": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vite",
     "build": "bash scripts/build-verified.sh",
     "start": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start",
-    "test": "node scripts/accounting/run.mjs workday && node scripts/accounting/run.mjs review && node scripts/accounting/run.mjs check && node scripts/accounting/run.mjs workflows && node scripts/accounting/run.mjs persistence && node scripts/accounting/run.mjs career && node scripts/accounting/run.mjs desktop && node scripts/accounting/run.mjs render",
+    "test": "node scripts/accounting/run.mjs clarity && node scripts/accounting/run.mjs workbook && node scripts/accounting/run.mjs workspace && node scripts/accounting/run.mjs workday && node scripts/accounting/run.mjs review && node scripts/accounting/run.mjs check && node scripts/accounting/run.mjs workflows && node scripts/accounting/run.mjs persistence && node scripts/accounting/run.mjs career && node scripts/accounting/run.mjs desktop && node scripts/accounting/run.mjs render",
     "lint": "bash scripts/sites-env.sh -- eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "bash scripts/sites-env.sh -- drizzle-kit generate",
     "generate:case": "node scripts/accounting/run.mjs export",
@@ -22,7 +22,9 @@
     "test:career": "node scripts/accounting/run.mjs career",
     "test:review": "node scripts/accounting/run-portable.mjs review",
     "test:workday": "node scripts/accounting/run-portable.mjs workday",
-    "typecheck:standalone": "tsc -p tsconfig.standalone.json"
+    "typecheck:standalone": "tsc -p tsconfig.standalone.json",
+    "test:workspace": "node scripts/accounting/run-portable.mjs workspace",
+    "test:clarity": "node scripts/accounting/run-portable.mjs clarity"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",

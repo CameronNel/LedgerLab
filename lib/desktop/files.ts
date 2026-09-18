@@ -9,30 +9,11 @@ import {monthEnd} from '../accounting/money';
 import {workbookXLSX} from './worksheet';
 import {WORKPAPER_TEMPLATES,enrichWorkingFile} from './workpaper-templates';
 import {newDesktopId,type DesktopUserFile} from './types';
-export type DesktopModel = {company:PracticeCompany;state:PracticeState;journals:Journal[];displayName:string;saving:boolean;saveStatus:string;error:string;generation:number;reportingMonth?:string};
+export type DesktopModel = {company:PracticeCompany;state:PracticeState;journals:Journal[];displayName:string;saving:boolean;saveStatus:string;error:string;generation:number;reportingMonth?:string;storageMode?:'browser'|'memory';storageNotice?:string};
 export type VirtualFile = {id:string;name:string;folder:string;kind:'document'|'mail'|'report'|'csv'|'note'|'workbook'|'template';date:string;description:string;ref:string;view?:string;taskId?:string;priority?:string;due?:string;category?:string};
 export type ScenarioMail = {id:string;date:string;from:string;subject:string;body:string[];attachments:string[];view?:string;taskId?:string;priority?:string;due?:string;category?:string};
 export type FilePayload = {name:string;content:string|Uint8Array;mime:string};
-export const FINANCE_APPS = [
-  {id:'overview',name:'Overview',short:'Overview'},
-  {id:'career',name:'Your finance desk',short:'Finance desk'},
-  {id:'ledger',name:'Journal & ledger',short:'Ledger'},
-  {id:'bank',name:'Bank reconciliation',short:'Bank'},
-  {id:'receivables',name:'Receivables',short:'Receivables'},
-  {id:'payables',name:'Payables',short:'Payables'},
-  {id:'payroll',name:'Payroll',short:'Payroll'},
-  {id:'close',name:'Month-end close',short:'Month-end'},
-  {id:'reports',name:'Financial statements',short:'AFS'},
-  {id:'assets',name:'Assets & leases',short:'Assets'},
-  {id:'inventory',name:'Inventory',short:'Inventory'},
-  {id:'provisions',name:'Provisions',short:'Provisions'},
-  {id:'tax',name:'Tax workspace',short:'Tax'},
-  {id:'audit',name:'Audit support',short:'Audit support'},
-  {id:'documents',name:'Source documents',short:'Documents'},
-  {id:'practice',name:'Practice path',short:'Practice'},
-  {id:'knowledge',name:'Accounting desk',short:'Guidance'},
-  {id:'settings',name:'Case, notebook & data',short:'Settings'},
-];
+export {FINANCE_APPS} from '../workspace/app-registry';
 export const currentMonth=(model:Pick<DesktopModel,'state'>)=>model.state.career?.activeMonth??'2025-12';
 export const monthLabel=(month:string)=>new Date(`${month}-15T12:00:00Z`).toLocaleDateString('en-GB',{month:'long',year:'numeric',timeZone:'UTC'});
 export const safeFilename=(name:string)=>name.replace(/[\\/<>:"|?*\x00-\x1f]/g,'-').replace(/[. ]+$/,'').slice(0,120)||'Untitled';
